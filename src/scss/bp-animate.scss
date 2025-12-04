@@ -1,0 +1,669 @@
+/**
+ * BP Animate Library Styles
+ * 
+ * All animation keyframes and animation classes for the BP Animate library.
+ * This file contains the core animation definitions that work with bp-animate.js
+ * 
+ * @version 1.0.0
+ */
+
+/* Animation base styles */
+.bp-animate {
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 2px solid #e9ecef;
+}
+
+/* ============================================
+   Keyframe Animations
+   ============================================ */
+
+/* Fade In Keyframes */
+@keyframes bpFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slide from Left Keyframes */
+@keyframes bpSlideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide from Right Keyframes */
+@keyframes bpSlideRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Scale Up Keyframes */
+@keyframes bpScaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Fade Up Keyframes */
+@keyframes bpFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade Down Keyframes */
+@keyframes bpFadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card Animation Keyframes */
+@keyframes bpCard {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Done Demo Keyframes */
+@keyframes bpDoneDemo {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade Out Keyframes */
+@keyframes bpFadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Slide Up Keyframes */
+@keyframes bpSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide Down Keyframes */
+@keyframes bpSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scale Down Keyframes */
+@keyframes bpScaleDown {
+    from {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Zoom In Keyframes */
+@keyframes bpZoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Zoom Out Keyframes */
+@keyframes bpZoomOut {
+    from {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Rotate In Keyframes */
+@keyframes bpRotateIn {
+    from {
+        opacity: 0;
+        transform: rotate(-180deg);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+}
+
+/* Rotate In Left Keyframes */
+@keyframes bpRotateInLeft {
+    from {
+        opacity: 0;
+        transform: rotate(-90deg) translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0deg) translateX(0);
+    }
+}
+
+/* Rotate In Right Keyframes */
+@keyframes bpRotateInRight {
+    from {
+        opacity: 0;
+        transform: rotate(90deg) translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0deg) translateX(0);
+    }
+}
+
+/* Bounce Keyframes */
+@keyframes bpBounce {
+    0%, 20%, 50%, 80%, 100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    40% {
+        opacity: 1;
+        transform: translateY(-30px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-15px);
+    }
+}
+
+/* Bounce In Keyframes */
+@keyframes bpBounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Bounce Up Keyframes */
+@keyframes bpBounceUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+    80% {
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bounce Down Keyframes */
+@keyframes bpBounceDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(10px);
+    }
+    80% {
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Flip X Keyframes */
+@keyframes bpFlipX {
+    from {
+        opacity: 0;
+        transform: perspective(400px) rotateX(90deg);
+    }
+    to {
+        opacity: 1;
+        transform: perspective(400px) rotateX(0deg);
+    }
+}
+
+/* Flip Y Keyframes */
+@keyframes bpFlipY {
+    from {
+        opacity: 0;
+        transform: perspective(400px) rotateY(90deg);
+    }
+    to {
+        opacity: 1;
+        transform: perspective(400px) rotateY(0deg);
+    }
+}
+
+/* Spin Keyframes */
+@keyframes bpSpin {
+    from {
+        opacity: 0;
+        transform: rotate(0deg) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+/* Elastic Keyframes */
+@keyframes bpElastic {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    70% {
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Slide Fade Up Keyframes */
+@keyframes bpSlideFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide Fade Down Keyframes */
+@keyframes bpSlideFadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide Fade Left Keyframes */
+@keyframes bpSlideFadeLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide Fade Right Keyframes */
+@keyframes bpSlideFadeRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ============================================
+   Animation Classes
+   ============================================ */
+
+/* Fade In Animation */
+.fade-in {
+    opacity: 0;
+
+    &.bp-is-animating {
+        animation: bpFadeIn 0.6s ease-in-out forwards;
+    }
+}
+
+/* Slide from Left Animation */
+.slide-left {
+    opacity: 0;
+    transform: translateX(-50px);
+
+    &.bp-is-animating {
+        animation: bpSlideLeft 0.6s ease-in-out forwards;
+    }
+}
+
+/* Slide from Right Animation */
+.slide-right {
+    opacity: 0;
+    transform: translateX(50px);
+
+    &.bp-is-animating {
+        animation: bpSlideRight 0.6s ease-in-out forwards;
+    }
+}
+
+/* Scale Up Animation */
+.scale-up {
+    opacity: 0;
+    transform: scale(0.8);
+
+    &.bp-is-animating {
+        animation: bpScaleUp 0.6s ease-in-out forwards;
+    }
+}
+
+/* Fade Up Animation */
+.fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+
+    &.bp-is-animating {
+        animation: bpFadeUp 0.6s ease-in-out forwards;
+    }
+}
+
+/* Fade Down Animation */
+.fade-down {
+    opacity: 0;
+    transform: translateY(-30px);
+
+    &.bp-is-animating {
+        animation: bpFadeDown 0.6s ease-in-out forwards;
+    }
+}
+
+/* Fade Out Animation */
+.fade-out {
+    opacity: 1;
+
+    &.bp-is-animating {
+        animation: bpFadeOut 0.6s ease-in-out forwards;
+    }
+}
+
+/* Slide Up Animation */
+.slide-up {
+    opacity: 0;
+    transform: translateY(50px);
+
+    &.bp-is-animating {
+        animation: bpSlideUp 0.6s ease-in-out forwards;
+    }
+}
+
+/* Slide Down Animation */
+.slide-down {
+    opacity: 0;
+    transform: translateY(-50px);
+
+    &.bp-is-animating {
+        animation: bpSlideDown 0.6s ease-in-out forwards;
+    }
+}
+
+/* Scale Down Animation */
+.scale-down {
+    opacity: 0;
+    transform: scale(1.2);
+
+    &.bp-is-animating {
+        animation: bpScaleDown 0.6s ease-in-out forwards;
+    }
+}
+
+/* Zoom In Animation */
+.zoom-in {
+    opacity: 0;
+    transform: scale(0.5);
+
+    &.bp-is-animating {
+        animation: bpZoomIn 0.6s ease-in-out forwards;
+    }
+}
+
+/* Zoom Out Animation */
+.zoom-out {
+    opacity: 0;
+    transform: scale(1.5);
+
+    &.bp-is-animating {
+        animation: bpZoomOut 0.6s ease-in-out forwards;
+    }
+}
+
+/* Rotate In Animation */
+.rotate-in {
+    opacity: 0;
+    transform: rotate(-180deg);
+
+    &.bp-is-animating {
+        animation: bpRotateIn 0.8s ease-in-out forwards;
+    }
+}
+
+/* Rotate In Left Animation */
+.rotate-in-left {
+    opacity: 0;
+    transform: rotate(-90deg) translateX(-50px);
+
+    &.bp-is-animating {
+        animation: bpRotateInLeft 0.8s ease-in-out forwards;
+    }
+}
+
+/* Rotate In Right Animation */
+.rotate-in-right {
+    opacity: 0;
+    transform: rotate(90deg) translateX(50px);
+
+    &.bp-is-animating {
+        animation: bpRotateInRight 0.8s ease-in-out forwards;
+    }
+}
+
+/* Bounce Animation */
+.bounce {
+    opacity: 0;
+
+    &.bp-is-animating {
+        animation: bpBounce 1s ease-in-out forwards;
+    }
+}
+
+/* Bounce In Animation */
+.bounce-in {
+    opacity: 0;
+    transform: scale(0.3);
+
+    &.bp-is-animating {
+        animation: bpBounceIn 0.8s ease-in-out forwards;
+    }
+}
+
+/* Bounce Up Animation */
+.bounce-up {
+    opacity: 0;
+    transform: translateY(50px);
+
+    &.bp-is-animating {
+        animation: bpBounceUp 0.8s ease-in-out forwards;
+    }
+}
+
+/* Bounce Down Animation */
+.bounce-down {
+    opacity: 0;
+    transform: translateY(-50px);
+
+    &.bp-is-animating {
+        animation: bpBounceDown 0.8s ease-in-out forwards;
+    }
+}
+
+/* Flip X Animation */
+.flip-x {
+    opacity: 0;
+    transform: perspective(400px) rotateX(90deg);
+
+    &.bp-is-animating {
+        animation: bpFlipX 0.8s ease-in-out forwards;
+    }
+}
+
+/* Flip Y Animation */
+.flip-y {
+    opacity: 0;
+    transform: perspective(400px) rotateY(90deg);
+
+    &.bp-is-animating {
+        animation: bpFlipY 0.8s ease-in-out forwards;
+    }
+}
+
+/* Spin Animation */
+.spin {
+    opacity: 0;
+    transform: rotate(0deg) scale(0.8);
+
+    &.bp-is-animating {
+        animation: bpSpin 0.8s ease-in-out forwards;
+    }
+}
+
+/* Elastic Animation */
+.elastic {
+    opacity: 0;
+    transform: scale(0);
+
+    &.bp-is-animating {
+        animation: bpElastic 0.8s ease-in-out forwards;
+    }
+}
+
+/* Slide Fade Up Animation */
+.slide-fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+
+    &.bp-is-animating {
+        animation: bpSlideFadeUp 0.6s ease-in-out forwards;
+    }
+}
+
+/* Slide Fade Down Animation */
+.slide-fade-down {
+    opacity: 0;
+    transform: translateY(-40px);
+
+    &.bp-is-animating {
+        animation: bpSlideFadeDown 0.6s ease-in-out forwards;
+    }
+}
+
+/* Slide Fade Left Animation */
+.slide-fade-left {
+    opacity: 0;
+    transform: translateX(-40px);
+
+    &.bp-is-animating {
+        animation: bpSlideFadeLeft 0.6s ease-in-out forwards;
+    }
+}
+
+/* Slide Fade Right Animation */
+.slide-fade-right {
+    opacity: 0;
+    transform: translateX(40px);
+
+    &.bp-is-animating {
+        animation: bpSlideFadeRight 0.6s ease-in-out forwards;
+    }
+}
+

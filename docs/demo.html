@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BP Animate - Demo</title>
+    <link rel="stylesheet" href="../dist/bp-animate.css">
+    <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BP Animate Library Demo</h1>
+            <p>Scroll down to see elements animate when they come into view</p>
+        </header>
+
+        <!-- Spacer to demonstrate scrolling -->
+        <div class="spacer"></div>
+
+        <!-- Example 1: Simple fade-in -->
+        <div class="demo-section">
+            <h2>Example 1: Fade In Animation</h2>
+            <div class="bp-animate fade-in">
+                <p>This element will fade in when it comes into view.</p>
+                <p>It has the "bp-animate" class, and when visible, it gets "bp-is-animating" added.</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 2: Slide from left -->
+        <div class="demo-section">
+            <h2>Example 2: Slide from Left</h2>
+            <div class="bp-animate slide-left">
+                <p>This element slides in from the left when it enters the viewport.</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 3: Slide from right -->
+        <div class="demo-section">
+            <h2>Example 3: Slide from Right</h2>
+            <div class="bp-animate slide-right">
+                <p>This element slides in from the right when it enters the viewport.</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 4: Scale up -->
+        <div class="demo-section">
+            <h2>Example 4: Scale Up</h2>
+            <div class="bp-animate scale-up">
+                <p>This element scales up when it comes into view.</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 4a: Fade Up -->
+        <div class="demo-section">
+            <h2>Example 4a: Fade Up Animation</h2>
+            <div class="bp-animate fade-up">
+                <p>This element fades in while moving up from below.</p>
+                <p>It starts 30px below its final position and fades in as it moves up.</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 4b: Fade Down -->
+        <div class="demo-section">
+            <h2>Example 4b: Fade Down Animation</h2>
+            <div class="bp-animate fade-down">
+                <p>This element fades in while moving down from above.</p>
+                <p>It starts 30px above its final position and fades in as it moves down.</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 5: Multiple elements -->
+        <div class="demo-section">
+            <h2>Example 5: Multiple Elements</h2>
+            <div class="bp-animate fade-in">
+                <p>First element</p>
+            </div>
+            <div class="bp-animate fade-in">
+                <p>Second element</p>
+            </div>
+            <div class="bp-animate fade-in">
+                <p>Third element</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 6: Card with animation -->
+        <div class="demo-section">
+            <h2>Example 6: Animated Card</h2>
+            <div class="bp-animate card">
+                <h3>Animated Card</h3>
+                <p>This is a card that animates when it comes into view.</p>
+                <p>Check the browser's developer tools to see the "bp-is-animating" class being added!</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 7: Done animation class -->
+        <div class="demo-section">
+            <h2>Example 7: Animation Complete Detection</h2>
+            <div class="bp-animate done-demo">
+                <p>This element changes color when the animation is complete!</p>
+                <p>Watch it fade in, then turn green when "bp-is-done-animating" is added.</p>
+                <p class="status-text">Status: <span class="status">Waiting to animate...</span></p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 8: Scale Animations -->
+        <div class="demo-section">
+            <h2>Example 8: Scale Animations</h2>
+            <div class="bp-animate scale-down">
+                <p>Scale Down - Starts larger and scales down</p>
+            </div>
+            <div class="bp-animate zoom-in">
+                <p>Zoom In - Starts very small and zooms in</p>
+            </div>
+            <div class="bp-animate zoom-out">
+                <p>Zoom Out - Starts very large and zooms out</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 9: Rotate Animations -->
+        <div class="demo-section">
+            <h2>Example 9: Rotate Animations</h2>
+            <div class="bp-animate rotate-in">
+                <p>Rotate In - Rotates in from -180 degrees</p>
+            </div>
+            <div class="bp-animate rotate-in-left">
+                <p>Rotate In Left - Rotates and slides from left</p>
+            </div>
+            <div class="bp-animate rotate-in-right">
+                <p>Rotate In Right - Rotates and slides from right</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 10: Bounce Animations -->
+        <div class="demo-section">
+            <h2>Example 10: Bounce Animations</h2>
+            <div class="bp-animate bounce-in">
+                <p>Bounce In - Bounces in with scale effect</p>
+            </div>
+            <div class="bp-animate bounce-up">
+                <p>Bounce Up - Bounces up from below</p>
+            </div>
+            <div class="bp-animate bounce-down">
+                <p>Bounce Down - Bounces down from above</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 11: Flip Animations -->
+        <div class="demo-section">
+            <h2>Example 11: Flip Animations</h2>
+            <div class="bp-animate flip-x">
+                <p>Flip X - Flips on the X axis (vertical flip)</p>
+            </div>
+            <div class="bp-animate flip-y">
+                <p>Flip Y - Flips on the Y axis (horizontal flip)</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 12: Special Effects -->
+        <div class="demo-section">
+            <h2>Example 12: Special Effects</h2>
+            <div class="bp-animate spin">
+                <p>Spin - Spins 360 degrees while scaling</p>
+            </div>
+            <div class="bp-animate elastic">
+                <p>Elastic - Elastic bounce effect with scale</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 13: Slide Fade Combinations -->
+        <div class="demo-section">
+            <h2>Example 13: Slide Fade Combinations</h2>
+            <div class="bp-animate slide-fade-up">
+                <p>Slide Fade Up - Combines slide and fade from below</p>
+            </div>
+            <div class="bp-animate slide-fade-down">
+                <p>Slide Fade Down - Combines slide and fade from above</p>
+            </div>
+            <div class="bp-animate slide-fade-left">
+                <p>Slide Fade Left - Combines slide and fade from left</p>
+            </div>
+            <div class="bp-animate slide-fade-right">
+                <p>Slide Fade Right - Combines slide and fade from right</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Example 14: Custom Animation Attributes -->
+        <div class="demo-section">
+            <h2>Example 14: Custom Animation Attributes</h2>
+            
+            <h3>Custom Duration</h3>
+            <div class="bp-animate fade-in" bp-duration="2s">
+                <p>This animation takes 2 seconds (default is 0.6s)</p>
+            </div>
+            
+            <h3>Custom Delay</h3>
+            <div class="bp-animate fade-in" bp-delay="1s">
+                <p>This animation has a 1 second delay before starting</p>
+            </div>
+            
+            <h3>Custom Easing</h3>
+            <div class="bp-animate fade-in" bp-easing="ease-out">
+                <p>This animation uses ease-out easing (default is ease-in-out)</p>
+            </div>
+            
+            <h3>Combined Attributes</h3>
+            <div class="bp-animate slide-left" bp-duration="1.5s" bp-delay="0.5s" bp-easing="cubic-bezier(0.68, -0.55, 0.265, 1.55)">
+                <p>Custom duration (1.5s), delay (0.5s), and custom cubic-bezier easing</p>
+            </div>
+            
+            <h3>Animation Once (bp-animation-once="true")</h3>
+            <div class="bp-animate bounce-in" bp-animation-once="true">
+                <p>This animation only runs once. Scroll up and down - it won't re-animate!</p>
+            </div>
+            
+            <h3>All Attributes Combined</h3>
+            <div class="bp-animate zoom-in" bp-duration="2s" bp-delay="1s" bp-easing="ease-in" bp-animation-once="true">
+                <p>Custom duration (2s), delay (1s), easing (ease-in), and one-time animation</p>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <footer>
+            <p>Keep scrolling to see more animations!</p>
+        </footer>
+    </div>
+
+    <!-- Load the BP Animate library -->
+    <script src="../dist/bp-animate.js"></script>
+    
+    <!-- Demo script to show status updates -->
+    <script>
+        // Watch for class changes on the done-demo element
+        const doneDemo = document.querySelector('.done-demo');
+        if (doneDemo) {
+            const statusSpan = doneDemo.querySelector('.status');
+            
+            // Use MutationObserver to watch for class changes
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        const element = mutation.target;
+                        if (element.classList.contains('bp-is-animating') && !element.classList.contains('bp-is-done-animating')) {
+                            statusSpan.textContent = 'Animating...';
+                        } else if (element.classList.contains('bp-is-done-animating')) {
+                            statusSpan.textContent = 'Animation complete! ✓';
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(doneDemo, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+    </script>
+</body>
+</html>
+

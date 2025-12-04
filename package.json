@@ -1,0 +1,48 @@
+{
+  "name": "bp-animate",
+  "version": "1.0.0",
+  "description": "A lightweight, vanilla JavaScript animation library that triggers animations when elements come into view",
+  "main": "dist/bp-animate.js",
+  "style": "dist/bp-animate.css",
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "sass src/scss/bp-animate.scss dist/bp-animate.css --style=expanded --source-map",
+    "build:css:min": "sass src/scss/bp-animate.scss dist/bp-animate.min.css --style=compressed --no-source-map",
+    "build:js": "cp src/js/bp-animate.js dist/bp-animate.js",
+    "build:all": "npm run build && npm run build:css:min",
+    "watch": "sass --watch src/scss/bp-animate.scss:dist/bp-animate.css",
+    "version": "npm run build && git add -A dist",
+    "prepublishOnly": "npm run build:all"
+  },
+  "keywords": [
+    "animation",
+    "scroll",
+    "viewport",
+    "intersection-observer",
+    "css-animations",
+    "keyframes",
+    "vanilla-js",
+    "lightweight"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/braudypedrosa/bp-animate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/braudypedrosa/bp-animate/issues"
+  },
+  "homepage": "https://github.com/braudypedrosa/bp-animate#readme",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "devDependencies": {
+    "sass": "^1.69.0"
+  }
+}
+

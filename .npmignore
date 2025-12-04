@@ -1,0 +1,18 @@
+# Source files (keep src for reference)
+src/
+docs/
+demo.*
+
+# Development files
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Build files (keep dist)
+*.map
+
+# Documentation
+CHANGELOG.md
+README.md
+

@@ -1,0 +1,278 @@
+/**
+ * BP Animate Library
+ * 
+ * A lightweight animation library that adds animation triggers when elements
+ * come into view. The base class "bp-animate" doesn't start animations itself,
+ * but triggers the "bp-is-animating" class when elements enter the viewport.
+ * When the animation completes, it adds the "bp-is-done-animating" class.
+ * 
+ * @version 1.0.0
+ */
+
+(function() {
+    'use strict';
+
+    /**
+     * Get animation attributes from element
+     * 
+     * Reads custom animation attributes (bp-duration, bp-delay, bp-easing)
+     * from the element. Returns null if no custom attributes are provided.
+     * 
+     * @param {HTMLElement} element - The element to read attributes from
+     * @returns {Object|null} Object containing duration, delay, and easing values, or null
+     * @since 1.0.0
+     */
+    function getAnimationAttributes(element) {
+        // Check if any custom attributes are provided
+        const hasDuration = element.hasAttribute('bp-duration');
+        const hasDelay = element.hasAttribute('bp-delay');
+        const hasEasing = element.hasAttribute('bp-easing');
+        
+        // If no custom attributes, return null to use CSS defaults
+        if (!hasDuration && !hasDelay && !hasEasing) {
+            return null;
+        }
+        
+        // Get duration (default: 0.6s if attribute exists but is empty)
+        const duration = hasDuration ? (element.getAttribute('bp-duration') || '0.6s') : '0.6s';
+        
+        // Get delay (default: 0s if attribute exists but is empty)
+        const delay = hasDelay ? (element.getAttribute('bp-delay') || '0s') : '0s';
+        
+        // Get easing (default: ease-in-out if attribute exists but is empty)
+        const easing = hasEasing ? (element.getAttribute('bp-easing') || 'ease-in-out') : 'ease-in-out';
+        
+        return {
+            duration: duration,
+            delay: delay,
+            easing: easing
+        };
+    }
+
+    /**
+     * Get keyframe name from animation class
+     * 
+     * Maps animation class names to their corresponding keyframe names.
+     * 
+     * @param {HTMLElement} element - The element to check for animation classes
+     * @returns {string|null} The keyframe name or null if no animation class found
+     * @since 1.0.0
+     */
+    function getKeyframeName(element) {
+        // Map of animation classes to their keyframe names
+        const animationMap = {
+            'fade-in': 'bpFadeIn',
+            'fade-out': 'bpFadeOut',
+            'fade-up': 'bpFadeUp',
+            'fade-down': 'bpFadeDown',
+            'slide-left': 'bpSlideLeft',
+            'slide-right': 'bpSlideRight',
+            'slide-up': 'bpSlideUp',
+            'slide-down': 'bpSlideDown',
+            'scale-up': 'bpScaleUp',
+            'scale-down': 'bpScaleDown',
+            'zoom-in': 'bpZoomIn',
+            'zoom-out': 'bpZoomOut',
+            'rotate-in': 'bpRotateIn',
+            'rotate-in-left': 'bpRotateInLeft',
+            'rotate-in-right': 'bpRotateInRight',
+            'bounce': 'bpBounce',
+            'bounce-in': 'bpBounceIn',
+            'bounce-up': 'bpBounceUp',
+            'bounce-down': 'bpBounceDown',
+            'flip-x': 'bpFlipX',
+            'flip-y': 'bpFlipY',
+            'spin': 'bpSpin',
+            'elastic': 'bpElastic',
+            'slide-fade-up': 'bpSlideFadeUp',
+            'slide-fade-down': 'bpSlideFadeDown',
+            'slide-fade-left': 'bpSlideFadeLeft',
+            'slide-fade-right': 'bpSlideFadeRight',
+            'card': 'bpCard',
+            'done-demo': 'bpDoneDemo'
+        };
+
+        // Check each class on the element to find a matching animation class
+        for (let className of element.classList) {
+            if (animationMap.hasOwnProperty(className)) {
+                return animationMap[className];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Apply animation styles to element
+     * 
+     * Applies custom duration, delay, and easing to the element
+     * by setting the animation property directly via inline styles.
+     * 
+     * @param {HTMLElement} element - The element to apply styles to
+     * @param {Object} attributes - Animation attributes object
+     * @since 1.0.0
+     */
+    function applyAnimationStyles(element, attributes) {
+        // Get the keyframe name for this element's animation class
+        const keyframeName = getKeyframeName(element);
+        
+        if (keyframeName) {
+            // Build the animation property: name duration easing delay fill-mode
+            // Using 'forwards' to keep the final state after animation completes
+            const animationValue = `${keyframeName} ${attributes.duration} ${attributes.easing} ${attributes.delay} forwards`;
+            element.style.animation = animationValue;
+        }
+    }
+
+    /**
+     * Handle animation completion
+     * 
+     * This function listens for transitionend and animationend events
+     * to detect when CSS animations/transitions are complete.
+     * When complete, it adds the "bp-is-done-animating" class.
+     * 
+     * @param {HTMLElement} element - The element that is animating
+     * @since 1.0.0
+     */
+    function handleAnimationComplete(element) {
+        // Track if we've already added the done class for this animation cycle
+        // This prevents multiple triggers if there are multiple transitions
+        let isDone = false;
+
+        /**
+         * Function to add the done class (only once per animation cycle)
+         */
+        function addDoneClass() {
+            if (!isDone) {
+                isDone = true;
+                element.classList.add('bp-is-done-animating');
+            }
+        }
+
+        // Listen for CSS transition end events
+        // This fires when any CSS transition property finishes animating
+        element.addEventListener('transitionend', function(event) {
+            // Only handle transitions on the element itself, not child elements
+            if (event.target === element) {
+                addDoneClass();
+            }
+        }, { once: true }); // { once: true } removes listener after first trigger
+
+        // Listen for CSS animation end events
+        // This fires when any CSS animation finishes
+        element.addEventListener('animationend', function(event) {
+            // Only handle animations on the element itself, not child elements
+            if (event.target === element) {
+                addDoneClass();
+            }
+        }, { once: true }); // { once: true } removes listener after first trigger
+    }
+
+    /**
+     * Initialize the BP Animate library
+     * 
+     * This function sets up an Intersection Observer to watch for elements
+     * with the "bp-animate" class. When these elements come into view,
+     * it adds the "bp-is-animating" class to trigger animations.
+     * When animations complete, it adds the "bp-is-done-animating" class.
+     * 
+     * @since 1.0.0
+     */
+    function initBPAnimate() {
+        // Get all elements with the bp-animate class
+        const animateElements = document.querySelectorAll('.bp-animate');
+
+        // If no elements found, exit early
+        if (animateElements.length === 0) {
+            return;
+        }
+
+        /**
+         * Intersection Observer options
+         * 
+         * root: null means we're observing relative to the viewport
+         * rootMargin: '0px' means no offset (you can adjust this to trigger earlier/later)
+         * threshold: 0 means trigger when any part of the element enters the viewport
+         */
+        const observerOptions = {
+            root: null,           // Viewport is the root
+            rootMargin: '0px',    // No margin offset
+            threshold: 0          // Trigger when element is 0% visible
+        };
+
+        /**
+         * Callback function that runs when observed elements intersect with the viewport
+         * 
+         * @param {IntersectionObserverEntry[]} entries - Array of intersection entries
+         * @param {IntersectionObserver} observer - The observer instance
+         */
+        function handleIntersection(entries, observer) {
+            entries.forEach(entry => {
+                // Check if the element is currently intersecting (visible in viewport)
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    
+                    // Get animation attributes (duration, delay, easing)
+                    // Returns null if no custom attributes are provided
+                    const attributes = getAnimationAttributes(element);
+                    
+                    // Apply animation styles only if custom attributes are provided
+                    if (attributes !== null) {
+                        applyAnimationStyles(element, attributes);
+                    }
+                    
+                    // Remove done class if it exists (for re-animations)
+                    element.classList.remove('bp-is-done-animating');
+                    
+                    // Add the bp-is-animating class to trigger the animation
+                    element.classList.add('bp-is-animating');
+                    
+                    // Set up listeners to detect when animation completes
+                    handleAnimationComplete(element);
+                    
+                    // Check if animation should only run once
+                    const animationOnce = element.getAttribute('bp-animation-once');
+                    if (animationOnce === 'true') {
+                        // Unobserve the element to prevent re-triggering
+                        observer.unobserve(element);
+                    }
+                } else {
+                    const element = entry.target;
+                    element.classList.remove('bp-is-animating');
+                    // Clear inline animation style when element leaves view
+                    // This allows CSS defaults to work if element re-enters without custom attributes
+                    element.style.animation = '';
+                }
+            });
+        }
+
+        // Create a new Intersection Observer instance
+        const observer = new IntersectionObserver(handleIntersection, observerOptions);
+
+        // Start observing each element with the bp-animate class
+        animateElements.forEach(element => {
+            observer.observe(element);
+        });
+    }
+
+    /**
+     * Initialize when DOM is ready
+     * 
+     * We wait for the DOM to be fully loaded before initializing.
+     * This ensures all elements with .bp-animate are available.
+     */
+    if (document.readyState === 'loading') {
+        // DOM is still loading, wait for DOMContentLoaded event
+        document.addEventListener('DOMContentLoaded', initBPAnimate);
+    } else {
+        // DOM is already loaded, initialize immediately
+        initBPAnimate();
+    }
+
+    // Also re-initialize if new elements are added dynamically
+    // This is useful if you're adding elements via JavaScript after page load
+    // You can manually call initBPAnimate() again if needed, or use a MutationObserver
+    // for automatic re-initialization (not included by default for simplicity)
+
+})();
+
