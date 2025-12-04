@@ -63,8 +63,8 @@ jsDelivr provides a free CDN that works with GitHub repositories:
 <script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.js"></script>
 
 <!-- Specific version/tag (recommended for production) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.0/dist/bp-animate.css">
-<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.0/dist/bp-animate.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.1/dist/bp-animate.css">
+<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.1/dist/bp-animate.js"></script>
 ```
 
 **Benefits of jsDelivr:**
@@ -242,7 +242,8 @@ If set to `"true"`, the animation only runs once. The element is unobserved afte
 - `bp-animate` - Required base class. Doesn't start animation itself, but enables viewport detection.
 
 ### State Classes
-- `bp-is-visible` - Automatically added when element enters viewport (works with or without animation classes)
+- `bp-is-visible` - Automatically added when element enters viewport AND is actually visible (works with or without animation classes)
+- `bp-is-hidden` - Automatically added when element is in viewport but NOT actually visible (e.g., opacity: 0, display: none, etc.)
 - `bp-is-animating` - Automatically added when element enters viewport and has an animation class (triggers animation)
 - `bp-is-done-animating` - Automatically added when animation completes
 
@@ -284,6 +285,20 @@ If set to `"true"`, the animation only runs once. The element is unobserved afte
 .bp-animate.bp-is-visible {
     opacity: 1;
     /* Element becomes fully visible when in viewport */
+}
+```
+
+### Example: Hidden Element Detection
+
+```html
+<p class="bp-animate" style="opacity: 0;">This will get bp-is-hidden when in viewport</p>
+```
+
+```css
+.bp-animate.bp-is-hidden {
+    /* Element is in viewport but hidden */
+    /* You can style hidden elements differently */
+    border: 1px dashed #ccc;
 }
 ```
 

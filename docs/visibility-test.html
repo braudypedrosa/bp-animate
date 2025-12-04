@@ -224,6 +224,8 @@ bpAnimate.trigger(element);</code></pre>
                 <p><strong>Scrollable Element:</strong> Should trigger when scrolled into view</p>
                 <p><strong>Dynamic Menu:</strong> Will trigger when made visible via class/CSS change</p>
                 <p><strong>bp-is-visible:</strong> Gets visibility class without animation</p>
+                <p><strong>bp-is-hidden:</strong> Gets hidden class when in viewport but not visible</p>
+                <p><strong>bp-is-hidden:</strong> Gets hidden class when in viewport but not visible</p>
                 <p style="margin-top: 20px; color: #666;">Check the status indicators above to see if elements triggered.</p>
             </div>
         </div>
@@ -319,12 +321,16 @@ bpAnimate.trigger(element);</code></pre>
                     clearTimeout(checkTimeout);
                     checkTimeout = setTimeout(function() {
                         const isVisible = visibleOnly.classList.contains('bp-is-visible');
+                        const isHidden = visibleOnly.classList.contains('bp-is-hidden');
                         const isAnimating = visibleOnly.classList.contains('bp-is-animating');
                         
                         if (isVisible) {
                             visibleOnly.classList.add('triggered');
                             visibleStatus.textContent = 'Status: ✓ bp-is-visible class added (no animation)';
                             visibleStatus.className = 'status visible';
+                        } else if (isHidden) {
+                            visibleStatus.textContent = 'Status: ✗ bp-is-hidden class added (element is hidden)';
+                            visibleStatus.className = 'status hidden';
                         } else {
                             visibleStatus.textContent = 'Status: Waiting for element to enter viewport...';
                             visibleStatus.className = 'status';
@@ -338,6 +344,41 @@ bpAnimate.trigger(element);</code></pre>
                 };
                 
                 setInterval(checkVisible, 500);
+            }
+
+            // Monitor bp-is-hidden element
+            const hiddenOnly = document.getElementById('hidden-only');
+            const hiddenStatus = document.getElementById('status-hidden');
+            
+            if (hiddenOnly && hiddenStatus) {
+                let checkTimeout;
+                const checkHidden = function() {
+                    clearTimeout(checkTimeout);
+                    checkTimeout = setTimeout(function() {
+                        const isVisible = hiddenOnly.classList.contains('bp-is-visible');
+                        const isHidden = hiddenOnly.classList.contains('bp-is-hidden');
+                        const isAnimating = hiddenOnly.classList.contains('bp-is-animating');
+                        
+                        if (isHidden) {
+                            hiddenOnly.classList.add('triggered');
+                            hiddenStatus.textContent = 'Status: ✓ bp-is-hidden class added (element in viewport but hidden)';
+                            hiddenStatus.className = 'status visible';
+                        } else if (isVisible) {
+                            hiddenStatus.textContent = 'Status: ✗ ERROR - bp-is-visible should NOT be added (element is hidden)';
+                            hiddenStatus.className = 'status hidden';
+                        } else {
+                            hiddenStatus.textContent = 'Status: Waiting for element to enter viewport...';
+                            hiddenStatus.className = 'status';
+                        }
+                        
+                        if (isAnimating) {
+                            hiddenStatus.textContent = 'Status: ✗ ERROR - bp-is-animating should NOT be added (element is hidden)';
+                            hiddenStatus.className = 'status hidden';
+                        }
+                    }, 100);
+                };
+                
+                setInterval(checkHidden, 500);
             }
 
             // Dynamic visibility demo
