@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BP Animate - Fixed Position Menu Test</title>
+    <link rel="stylesheet" href="../dist/bp-animate.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+            min-height: 200vh; /* Make page scrollable */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .test-section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .test-section h2 {
+            margin-top: 0;
+            color: #667eea;
+            font-size: 1.3em;
+        }
+
+        .test-item {
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+
+        .test-item.triggered {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .test-item.triggered::before {
+            content: "✓ TRIGGERED ";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .status {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .status.visible {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.hidden {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Fixed position menu - should NOT trigger */
+        .fixed-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            padding: 20px;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            opacity: 0; /* Hidden on load */
+        }
+
+        .fixed-menu.triggered {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .fixed-menu.triggered::before {
+            content: "✗ INCORRECTLY TRIGGERED ";
+            color: #dc3545;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Normal scrollable element - should trigger */
+        .scrollable-element {
+            margin: 50px 0;
+            padding: 30px;
+            background: #e7f3ff;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+        }
+
+        .spacer {
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BP Animate - Fixed Position Menu Test</h1>
+        <p>This demo tests whether fixed-position elements with opacity: 0 (like hidden menus) incorrectly trigger animations.</p>
+    </div>
+
+    <!-- Fixed position menu - should NOT trigger -->
+    <div class="bp-animate fade-in fixed-menu" id="fixed-menu">
+        <strong>Fixed Menu</strong>
+        <p style="font-size: 0.9em; margin-top: 10px;">This menu is fixed position with opacity: 0. It should NOT trigger animations.</p>
+        <div class="status" id="status-menu">Waiting...</div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <!-- Normal scrollable element - should trigger -->
+    <div class="container">
+        <div class="test-section">
+            <h2>Normal Scrollable Element (SHOULD Trigger)</h2>
+            <p>This element should trigger when scrolled into view.</p>
+            <div class="bp-animate fade-in scrollable-element" id="scrollable-element">
+                <strong>Scrollable Element</strong>
+                <p>This element has the fade-in animation and should trigger when you scroll it into view.</p>
+                <div class="status" id="status-scrollable">Waiting...</div>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <!-- Dynamic visibility demo -->
+        <div class="test-section">
+            <h2>Dynamic Visibility Demo</h2>
+            <p>This menu starts hidden. Click the button to make it visible - the animation will trigger automatically!</p>
+            <button id="toggle-menu" style="padding: 10px 20px; margin-bottom: 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">
+                Show Menu
+            </button>
+            <div class="bp-animate fade-in fixed-menu" id="dynamic-menu" style="position: relative; top: auto; right: auto; opacity: 0;">
+                <strong>Dynamic Menu</strong>
+                <p style="font-size: 0.9em; margin-top: 10px;">This menu becomes visible when you click the button above.</p>
+                <div class="status" id="status-dynamic">Hidden - Click button to show</div>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <!-- Manual trigger demo -->
+        <div class="test-section">
+            <h2>Manual Trigger Demo</h2>
+            <p>You can also manually trigger animations using JavaScript:</p>
+            <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto;"><code>// Trigger animation on an element
+bpAnimate.trigger('#my-element');
+
+// Or pass the element directly
+const element = document.querySelector('#my-element');
+bpAnimate.trigger(element);</code></pre>
+            <button id="manual-trigger" style="padding: 10px 20px; margin-top: 15px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">
+                Manually Trigger Animation
+            </button>
+            <div class="bp-animate fade-in test-item" id="manual-element" style="opacity: 0; margin-top: 15px;">
+                <strong>Manually Triggered Element</strong>
+                <div class="status" id="status-manual">Click button above to trigger</div>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <!-- Summary -->
+        <div class="test-section">
+            <h2>Test Results</h2>
+            <div id="summary">
+                <p><strong>Fixed Menu:</strong> Should NOT trigger (it's hidden with opacity: 0)</p>
+                <p><strong>Scrollable Element:</strong> Should trigger when scrolled into view</p>
+                <p><strong>Dynamic Menu:</strong> Will trigger when made visible via class/CSS change</p>
+                <p style="margin-top: 20px; color: #666;">Check the status indicators above to see if elements triggered.</p>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+    </div>
+
+    <!-- Load the BP Animate library -->
+    <script src="../dist/bp-animate.js"></script>
+    
+    <!-- Test script -->
+    <script>
+        (function() {
+            'use strict';
+            
+            // Monitor fixed menu
+            const fixedMenu = document.getElementById('fixed-menu');
+            const menuStatus = document.getElementById('status-menu');
+            
+            if (fixedMenu && menuStatus) {
+                const style = window.getComputedStyle(fixedMenu);
+                menuStatus.textContent = `Position: ${style.position}, Opacity: ${style.opacity}`;
+                
+                let checkTimeout;
+                const checkMenu = function() {
+                    clearTimeout(checkTimeout);
+                    checkTimeout = setTimeout(function() {
+                        const isAnimating = fixedMenu.classList.contains('bp-is-animating');
+                        const isDone = fixedMenu.classList.contains('bp-is-done-animating');
+                        
+                        if (isAnimating || isDone) {
+                            fixedMenu.classList.add('triggered');
+                            
+                            if (isAnimating) {
+                                menuStatus.textContent = 'Status: ✗ INCORRECTLY TRIGGERED (bp-is-animating added)';
+                                menuStatus.className = 'status hidden';
+                                console.error('ERROR: Fixed menu triggered when it should not have!');
+                            }
+                            
+                            if (isDone) {
+                                menuStatus.textContent = 'Status: ✗ INCORRECTLY COMPLETE (bp-is-done-animating added)';
+                                menuStatus.className = 'status hidden';
+                            }
+                        } else {
+                            menuStatus.textContent = 'Status: ✓ NOT TRIGGERED (correct behavior)';
+                            menuStatus.className = 'status visible';
+                        }
+                    }, 100);
+                };
+                
+                setInterval(checkMenu, 500);
+            }
+
+            // Monitor scrollable element
+            const scrollableEl = document.getElementById('scrollable-element');
+            const scrollableStatus = document.getElementById('status-scrollable');
+            
+            if (scrollableEl && scrollableStatus) {
+                let checkTimeout;
+                const checkScrollable = function() {
+                    clearTimeout(checkTimeout);
+                    checkTimeout = setTimeout(function() {
+                        const isAnimating = scrollableEl.classList.contains('bp-is-animating');
+                        const isDone = scrollableEl.classList.contains('bp-is-done-animating');
+                        
+                        if (isAnimating || isDone) {
+                            scrollableEl.classList.add('triggered');
+                            
+                            if (isAnimating) {
+                                scrollableStatus.textContent = 'Status: ✓ TRIGGERED (bp-is-animating added)';
+                                scrollableStatus.className = 'status visible';
+                                console.log('SUCCESS: Scrollable element triggered correctly');
+                            }
+                            
+                            if (isDone) {
+                                scrollableStatus.textContent = 'Status: ✓ COMPLETE (bp-is-done-animating added)';
+                                scrollableStatus.className = 'status visible';
+                            }
+                        }
+                    }, 100);
+                };
+                
+                setInterval(checkScrollable, 500);
+            }
+
+            // Dynamic visibility demo
+            const toggleButton = document.getElementById('toggle-menu');
+            const dynamicMenu = document.getElementById('dynamic-menu');
+            const dynamicStatus = document.getElementById('status-dynamic');
+            
+            if (toggleButton && dynamicMenu && dynamicStatus) {
+                let isVisible = false;
+                
+                toggleButton.addEventListener('click', function() {
+                    if (!isVisible) {
+                        // Make menu visible by removing opacity: 0
+                        dynamicMenu.style.opacity = '1';
+                        dynamicMenu.style.transition = 'opacity 0.3s ease-in-out';
+                        toggleButton.textContent = 'Hide Menu';
+                        isVisible = true;
+                        
+                        // The MutationObserver will detect the style change and trigger animation
+                        // But we can also manually trigger if needed
+                        setTimeout(function() {
+                            if (window.bpAnimate) {
+                                window.bpAnimate.trigger(dynamicMenu);
+                            }
+                        }, 100);
+                    } else {
+                        // Hide menu
+                        dynamicMenu.style.opacity = '0';
+                        dynamicMenu.classList.remove('bp-is-animating', 'bp-is-done-animating', 'triggered');
+                        toggleButton.textContent = 'Show Menu';
+                        isVisible = false;
+                        dynamicStatus.textContent = 'Hidden - Click button to show';
+                        dynamicStatus.className = 'status';
+                    }
+                });
+                
+                // Monitor dynamic menu
+                let checkTimeout;
+                const checkDynamic = function() {
+                    clearTimeout(checkTimeout);
+                    checkTimeout = setTimeout(function() {
+                        const isAnimating = dynamicMenu.classList.contains('bp-is-animating');
+                        const isDone = dynamicMenu.classList.contains('bp-is-done-animating');
+                        
+                        if (isAnimating) {
+                            dynamicMenu.classList.add('triggered');
+                            dynamicStatus.textContent = 'Status: ✓ TRIGGERED (bp-is-animating added)';
+                            dynamicStatus.className = 'status visible';
+                        }
+                        
+                        if (isDone) {
+                            dynamicStatus.textContent = 'Status: ✓ COMPLETE (bp-is-done-animating added)';
+                            dynamicStatus.className = 'status visible';
+                        }
+                    }, 100);
+                };
+                
+                setInterval(checkDynamic, 500);
+            }
+
+            // Manual trigger demo
+            const manualTriggerBtn = document.getElementById('manual-trigger');
+            const manualElement = document.getElementById('manual-element');
+            const manualStatus = document.getElementById('status-manual');
+            
+            if (manualTriggerBtn && manualElement && manualStatus) {
+                manualTriggerBtn.addEventListener('click', function() {
+                    // Make element visible first
+                    manualElement.style.opacity = '1';
+                    
+                    // Manually trigger animation
+                    if (window.bpAnimate) {
+                        const triggered = window.bpAnimate.trigger(manualElement);
+                        if (triggered) {
+                            manualStatus.textContent = 'Status: Animation triggered!';
+                            manualStatus.className = 'status visible';
+                        } else {
+                            manualStatus.textContent = 'Status: Failed to trigger (element not visible or no animation class)';
+                            manualStatus.className = 'status hidden';
+                        }
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

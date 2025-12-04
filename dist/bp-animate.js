@@ -6,7 +6,7 @@
  * but triggers the "bp-is-animating" class when elements enter the viewport.
  * When the animation completes, it adds the "bp-is-done-animating" class.
  * 
- * @version 1.0.0
+ * @version 1.1.1
  */
 
 (function() {
@@ -125,6 +125,86 @@
     }
 
     /**
+     * Check if element is actually visible
+     * 
+     * Checks if an element is truly visible, not just in the viewport.
+     * An element is considered visible if:
+     * - It has dimensions (width and height > 0)
+     * - It's not display: none
+     * - It's not visibility: hidden
+     * - It has opacity > 0 OR has animation classes AND is not intentionally hidden
+     * 
+     * This prevents triggering animations on elements that are intentionally hidden
+     * via opacity: 0 but are not part of an animation sequence.
+     * 
+     * @param {HTMLElement} element - The element to check
+     * @returns {boolean} True if element is visible, false otherwise
+     * @since 1.0.0
+     */
+    function isElementVisible(element) {
+        // Get computed styles
+        const style = window.getComputedStyle(element);
+        
+        // Check if element is hidden via display
+        if (style.display === 'none') {
+            return false;
+        }
+        
+        // Check if element is hidden via visibility
+        if (style.visibility === 'hidden') {
+            return false;
+        }
+        
+        // Check if element has dimensions
+        const rect = element.getBoundingClientRect();
+        if (rect.width === 0 && rect.height === 0) {
+            return false;
+        }
+        
+        // Check opacity
+        const opacity = parseFloat(style.opacity);
+        
+        // If opacity is 0, we need to be more careful
+        if (opacity === 0) {
+            // Check if element has a valid animation class
+            const hasAnimationClass = getKeyframeName(element) !== null;
+            
+            // If it doesn't have a valid animation class, it's intentionally hidden
+            if (!hasAnimationClass) {
+                return false;
+            }
+            
+            // Element has opacity 0 and an animation class
+            // Check if opacity is set via inline style (intentional hiding)
+            const inlineOpacity = element.style.opacity;
+            if (inlineOpacity === '0' || inlineOpacity === '0px') {
+                // Opacity is explicitly set to 0 via inline style - this is intentional hiding
+                // Even if it has an animation class, don't trigger if opacity is explicitly 0
+                return false;
+            }
+            
+            // Check if element has position fixed/absolute
+            // Fixed/absolute elements with opacity 0 are often intentionally hidden (like menus)
+            // Only trigger if explicitly allowed via data attribute
+            const position = style.position;
+            if ((position === 'fixed' || position === 'absolute') && opacity === 0) {
+                // For fixed/absolute elements with opacity 0, require explicit permission
+                // This prevents menus and other hidden fixed elements from auto-triggering
+                if (!element.hasAttribute('data-bp-allow-hidden-animate')) {
+                    return false;
+                }
+            }
+            
+            // Element has opacity 0 but has a valid animation class and passes other checks
+            // Opacity 0 is the initial state for fade-in, slide, etc. animations
+            return true;
+        }
+        
+        // Element has opacity > 0, so it's visible
+        return true;
+    }
+
+    /**
      * Handle animation completion
      * 
      * This function listens for transitionend and animationend events
@@ -212,6 +292,13 @@
                 if (entry.isIntersecting) {
                     const element = entry.target;
                     
+                    // Check if element is actually visible before triggering animation
+                    // This prevents triggering animations on elements that are hidden via opacity: 0
+                    // or other CSS properties (unless opacity: 0 is part of the animation itself)
+                    if (!isElementVisible(element)) {
+                        return; // Skip this element, it's not actually visible
+                    }
+                    
                     // Get animation attributes (duration, delay, easing)
                     // Returns null if no custom attributes are provided
                     const attributes = getAnimationAttributes(element);
@@ -256,6 +343,115 @@
     }
 
     /**
+     * Manually trigger animation for an element
+     * 
+     * This function allows you to manually trigger an animation on an element,
+     * useful when elements become visible dynamically via class or CSS changes.
+     * 
+     * @param {HTMLElement|string} element - The element or selector to trigger animation on
+     * @returns {boolean} True if animation was triggered, false otherwise
+     * @since 1.1.0
+     */
+    function triggerAnimation(element) {
+        // Get element if selector string provided
+        if (typeof element === 'string') {
+            element = document.querySelector(element);
+        }
+        
+        // Check if element exists and has bp-animate class
+        if (!element || !element.classList.contains('bp-animate')) {
+            return false;
+        }
+        
+        // Check if element is actually visible now
+        if (!isElementVisible(element)) {
+            return false;
+        }
+        
+        // Get animation attributes
+        const attributes = getAnimationAttributes(element);
+        
+        // Apply animation styles if custom attributes provided
+        if (attributes !== null) {
+            applyAnimationStyles(element, attributes);
+        }
+        
+        // Remove done class if it exists (for re-animations)
+        element.classList.remove('bp-is-done-animating');
+        
+        // Add the bp-is-animating class to trigger the animation
+        element.classList.add('bp-is-animating');
+        
+        // Set up listeners to detect when animation completes
+        handleAnimationComplete(element);
+        
+        return true;
+    }
+
+    /**
+     * Watch for dynamic visibility changes
+     * 
+     * Sets up a MutationObserver to watch for class and style changes
+     * that might make elements visible, and triggers animations accordingly.
+     * 
+     * @param {HTMLElement[]} elements - Array of elements to watch
+     * @since 1.1.0
+     */
+    function watchForVisibilityChanges(elements) {
+        elements.forEach(element => {
+            // Only watch elements that haven't been observed yet
+            if (element.dataset.bpWatched === 'true') {
+                return;
+            }
+            
+            element.dataset.bpWatched = 'true';
+            
+            // Watch for class and style attribute changes
+            const observer = new MutationObserver(function(mutations) {
+                let shouldCheck = false;
+                
+                mutations.forEach(function(mutation) {
+                    // Check if class or style changed
+                    if (mutation.type === 'attributes' && 
+                        (mutation.attributeName === 'class' || mutation.attributeName === 'style')) {
+                        shouldCheck = true;
+                    }
+                });
+                
+                // If relevant changes occurred, check if element is now visible
+                if (shouldCheck) {
+                    // Small delay to allow CSS to update
+                    setTimeout(function() {
+                        // Only trigger if element is not already animating
+                        if (!element.classList.contains('bp-is-animating') && 
+                            !element.classList.contains('bp-is-done-animating')) {
+                            
+                            // Check if element is now visible
+                            if (isElementVisible(element)) {
+                                // Check if element is in viewport
+                                const rect = element.getBoundingClientRect();
+                                const isInViewport = rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
+                                                    rect.bottom > 0 &&
+                                                    rect.left < (window.innerWidth || document.documentElement.clientWidth) &&
+                                                    rect.right > 0;
+                                
+                                if (isInViewport) {
+                                    triggerAnimation(element);
+                                }
+                            }
+                        }
+                    }, 50);
+                }
+            });
+            
+            observer.observe(element, {
+                attributes: true,
+                attributeFilter: ['class', 'style']
+            });
+        });
+    }
+
+    /**
      * Initialize when DOM is ready
      * 
      * We wait for the DOM to be fully loaded before initializing.
@@ -263,16 +459,25 @@
      */
     if (document.readyState === 'loading') {
         // DOM is still loading, wait for DOMContentLoaded event
-        document.addEventListener('DOMContentLoaded', initBPAnimate);
+        document.addEventListener('DOMContentLoaded', function() {
+            initBPAnimate();
+            // Watch for dynamic visibility changes
+            const animateElements = document.querySelectorAll('.bp-animate');
+            watchForVisibilityChanges(Array.from(animateElements));
+        });
     } else {
         // DOM is already loaded, initialize immediately
         initBPAnimate();
+        // Watch for dynamic visibility changes
+        const animateElements = document.querySelectorAll('.bp-animate');
+        watchForVisibilityChanges(Array.from(animateElements));
     }
 
-    // Also re-initialize if new elements are added dynamically
-    // This is useful if you're adding elements via JavaScript after page load
-    // You can manually call initBPAnimate() again if needed, or use a MutationObserver
-    // for automatic re-initialization (not included by default for simplicity)
+    // Expose public API
+    window.bpAnimate = {
+        trigger: triggerAnimation,
+        init: initBPAnimate
+    };
 
 })();
 

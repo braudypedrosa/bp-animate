@@ -36,17 +36,55 @@ Download the following files from the [releases page](https://github.com/braudyp
 - `dist/bp-animate.js` - The JavaScript library
 - `dist/bp-animate.css` - The compiled CSS
 
-### Option 3: CDN (Coming Soon)
+### Option 3: GitHub Raw Links (Auto-Update)
+
+You can link directly to the raw GitHub files. These will automatically update when you push changes:
 
 ```html
 <!-- CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bp-animate@1.0.0/dist/bp-animate.css">
+<link rel="stylesheet" href="https://raw.githubusercontent.com/braudypedrosa/bp-animate/main/dist/bp-animate.css">
 
 <!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bp-animate@1.0.0/dist/bp-animate.js"></script>
+<script src="https://raw.githubusercontent.com/braudypedrosa/bp-animate/main/dist/bp-animate.js"></script>
 ```
 
-> **Note:** CDN links will be available after publishing to NPM. For now, use the GitHub releases or clone the repository.
+**Note:** Raw GitHub links work but aren't recommended for production due to:
+- No caching headers (slower performance)
+- No versioning (breaking changes affect all users)
+- GitHub rate limiting
+
+### Option 4: jsDelivr CDN (Recommended for Production)
+
+jsDelivr provides a free CDN that works with GitHub repositories:
+
+```html
+<!-- Latest version from main branch -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.css">
+<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.js"></script>
+
+<!-- Specific version/tag (recommended for production) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.1.1/dist/bp-animate.css">
+<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.1.1/dist/bp-animate.js"></script>
+```
+
+**Benefits of jsDelivr:**
+- ✅ Fast CDN with caching
+- ✅ Version pinning for stability
+- ✅ Auto-updates when using `@main` branch
+- ✅ Works with GitHub releases/tags
+- ✅ Free and reliable
+
+### Option 5: NPM CDN (After Publishing)
+
+Once published to NPM:
+
+```html
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bp-animate@1.1.1/dist/bp-animate.css">
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bp-animate@1.1.1/dist/bp-animate.js"></script>
+```
 
 ### Option 4: Include in Your Project
 
