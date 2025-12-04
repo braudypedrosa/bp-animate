@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2024-01-XX
+
+### Added
+- Added `bp-is-visible` class that gets added to all elements with `bp-animate` when they enter the viewport
+- `bp-is-visible` works independently of animation classes - useful for visibility detection without animations
+- Elements with only `bp-animate` class (no animation class) now get `bp-is-visible` when scrolled into view
+
+### Changed
+- `bp-is-visible` is now added to all visible elements, regardless of whether they have animation classes
+- Improved separation between visibility detection and animation triggering
+
 ## [1.1.1] - 2024-01-XX
 
 ### Fixed

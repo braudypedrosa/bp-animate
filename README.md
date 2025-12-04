@@ -63,8 +63,8 @@ jsDelivr provides a free CDN that works with GitHub repositories:
 <script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.js"></script>
 
 <!-- Specific version/tag (recommended for production) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.1.1/dist/bp-animate.css">
-<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.1.1/dist/bp-animate.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.0/dist/bp-animate.css">
+<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.0/dist/bp-animate.js"></script>
 ```
 
 **Benefits of jsDelivr:**
@@ -107,6 +107,18 @@ Once published to NPM:
 ```
 
 2. That's it! The animation will automatically trigger when the element enters the viewport.
+
+### Visibility Detection Without Animation
+
+You can also use `bp-animate` without an animation class to just detect when elements are visible:
+
+```html
+<div class="bp-animate">
+    <p>This will get bp-is-visible class when in viewport</p>
+</div>
+```
+
+The `bp-is-visible` class is added when the element enters the viewport, regardless of whether it has an animation class.
 
 ## Basic Usage
 
@@ -230,7 +242,8 @@ If set to `"true"`, the animation only runs once. The element is unobserved afte
 - `bp-animate` - Required base class. Doesn't start animation itself, but enables viewport detection.
 
 ### State Classes
-- `bp-is-animating` - Automatically added when element enters viewport (triggers animation)
+- `bp-is-visible` - Automatically added when element enters viewport (works with or without animation classes)
+- `bp-is-animating` - Automatically added when element enters viewport and has an animation class (triggers animation)
 - `bp-is-done-animating` - Automatically added when animation completes
 
 ### Example: Styling Based on Animation State
@@ -241,6 +254,11 @@ If set to `"true"`, the animation only runs once. The element is unobserved afte
     opacity: 0;
 }
 
+.my-element.bp-is-visible {
+    /* Element is in viewport (works with or without animation) */
+    /* You can style elements that are just visible */
+}
+
 .my-element.bp-is-animating {
     /* Animation is running */
     /* Styles applied during animation */
@@ -249,6 +267,23 @@ If set to `"true"`, the animation only runs once. The element is unobserved afte
 .my-element.bp-is-done-animating {
     /* Animation is complete */
     border: 2px solid green;
+}
+```
+
+### Example: Visibility Detection Without Animation
+
+```html
+<p class="bp-animate">This will get bp-is-visible when scrolled into view</p>
+```
+
+```css
+.bp-animate {
+    opacity: 0.5;
+}
+
+.bp-animate.bp-is-visible {
+    opacity: 1;
+    /* Element becomes fully visible when in viewport */
 }
 ```
 

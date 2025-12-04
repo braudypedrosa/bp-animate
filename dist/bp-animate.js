@@ -6,7 +6,7 @@
  * but triggers the "bp-is-animating" class when elements enter the viewport.
  * When the animation completes, it adds the "bp-is-done-animating" class.
  * 
- * @version 1.1.1
+ * @version 1.2.0
  */
 
 (function() {
@@ -299,33 +299,46 @@
                         return; // Skip this element, it's not actually visible
                     }
                     
-                    // Get animation attributes (duration, delay, easing)
-                    // Returns null if no custom attributes are provided
-                    const attributes = getAnimationAttributes(element);
+                    // Always add bp-is-visible class when element is in viewport and visible
+                    // This works for elements with or without animation classes
+                    element.classList.add('bp-is-visible');
                     
-                    // Apply animation styles only if custom attributes are provided
-                    if (attributes !== null) {
-                        applyAnimationStyles(element, attributes);
-                    }
+                    // Check if element has an animation class
+                    // Only trigger animation if element has a valid animation class
+                    const hasAnimationClass = getKeyframeName(element) !== null;
                     
-                    // Remove done class if it exists (for re-animations)
-                    element.classList.remove('bp-is-done-animating');
-                    
-                    // Add the bp-is-animating class to trigger the animation
-                    element.classList.add('bp-is-animating');
-                    
-                    // Set up listeners to detect when animation completes
-                    handleAnimationComplete(element);
-                    
-                    // Check if animation should only run once
-                    const animationOnce = element.getAttribute('bp-animation-once');
-                    if (animationOnce === 'true') {
-                        // Unobserve the element to prevent re-triggering
-                        observer.unobserve(element);
+                    if (hasAnimationClass) {
+                        // Get animation attributes (duration, delay, easing)
+                        // Returns null if no custom attributes are provided
+                        const attributes = getAnimationAttributes(element);
+                        
+                        // Apply animation styles only if custom attributes are provided
+                        if (attributes !== null) {
+                            applyAnimationStyles(element, attributes);
+                        }
+                        
+                        // Remove done class if it exists (for re-animations)
+                        element.classList.remove('bp-is-done-animating');
+                        
+                        // Add the bp-is-animating class to trigger the animation
+                        element.classList.add('bp-is-animating');
+                        
+                        // Set up listeners to detect when animation completes
+                        handleAnimationComplete(element);
+                        
+                        // Check if animation should only run once
+                        const animationOnce = element.getAttribute('bp-animation-once');
+                        if (animationOnce === 'true') {
+                            // Unobserve the element to prevent re-triggering
+                            observer.unobserve(element);
+                        }
                     }
                 } else {
                     const element = entry.target;
+                    // Remove animation classes when element leaves viewport
                     element.classList.remove('bp-is-animating');
+                    // Remove visible class when element leaves viewport
+                    element.classList.remove('bp-is-visible');
                     // Clear inline animation style when element leaves view
                     // This allows CSS defaults to work if element re-enters without custom attributes
                     element.style.animation = '';
@@ -368,22 +381,30 @@
             return false;
         }
         
-        // Get animation attributes
-        const attributes = getAnimationAttributes(element);
+        // Always add bp-is-visible class
+        element.classList.add('bp-is-visible');
         
-        // Apply animation styles if custom attributes provided
-        if (attributes !== null) {
-            applyAnimationStyles(element, attributes);
+        // Check if element has an animation class
+        const hasAnimationClass = getKeyframeName(element) !== null;
+        
+        if (hasAnimationClass) {
+            // Get animation attributes
+            const attributes = getAnimationAttributes(element);
+            
+            // Apply animation styles if custom attributes provided
+            if (attributes !== null) {
+                applyAnimationStyles(element, attributes);
+            }
+            
+            // Remove done class if it exists (for re-animations)
+            element.classList.remove('bp-is-done-animating');
+            
+            // Add the bp-is-animating class to trigger the animation
+            element.classList.add('bp-is-animating');
+            
+            // Set up listeners to detect when animation completes
+            handleAnimationComplete(element);
         }
-        
-        // Remove done class if it exists (for re-animations)
-        element.classList.remove('bp-is-done-animating');
-        
-        // Add the bp-is-animating class to trigger the animation
-        element.classList.add('bp-is-animating');
-        
-        // Set up listeners to detect when animation completes
-        handleAnimationComplete(element);
         
         return true;
     }
@@ -436,6 +457,10 @@
                                                     rect.right > 0;
                                 
                                 if (isInViewport) {
+                                    // Always add bp-is-visible class
+                                    element.classList.add('bp-is-visible');
+                                    
+                                    // Trigger animation if element has animation class
                                     triggerAnimation(element);
                                 }
                             }

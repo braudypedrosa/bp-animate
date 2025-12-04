@@ -153,6 +153,19 @@
 
         <div class="spacer"></div>
 
+        <!-- bp-is-visible demo -->
+        <div class="test-section">
+            <h2>bp-is-visible Class (No Animation Required)</h2>
+            <p>This element has <code>bp-animate</code> but no animation class. It will get <code>bp-is-visible</code> when in viewport.</p>
+            <div class="bp-animate test-item" id="visible-only" style="background: #e7f3ff; border-color: #667eea;">
+                <strong>Element with bp-animate only</strong>
+                <p>This element will get <code>bp-is-visible</code> class when scrolled into view, but no animation will trigger.</p>
+                <div class="status" id="status-visible">Waiting...</div>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+
         <!-- Dynamic visibility demo -->
         <div class="test-section">
             <h2>Dynamic Visibility Demo</h2>
@@ -190,6 +203,19 @@ bpAnimate.trigger(element);</code></pre>
 
         <div class="spacer"></div>
 
+        <!-- bp-is-visible demo -->
+        <div class="test-section">
+            <h2>bp-is-visible Class (No Animation Required)</h2>
+            <p>This element has <code>bp-animate</code> but no animation class. It will get <code>bp-is-visible</code> when in viewport.</p>
+            <div class="bp-animate test-item" id="visible-only" style="background: #e7f3ff; border-color: #667eea;">
+                <strong>Element with bp-animate only</strong>
+                <p>This element will get <code>bp-is-visible</code> class when scrolled into view, but no animation will trigger.</p>
+                <div class="status" id="status-visible">Waiting...</div>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+
         <!-- Summary -->
         <div class="test-section">
             <h2>Test Results</h2>
@@ -197,6 +223,7 @@ bpAnimate.trigger(element);</code></pre>
                 <p><strong>Fixed Menu:</strong> Should NOT trigger (it's hidden with opacity: 0)</p>
                 <p><strong>Scrollable Element:</strong> Should trigger when scrolled into view</p>
                 <p><strong>Dynamic Menu:</strong> Will trigger when made visible via class/CSS change</p>
+                <p><strong>bp-is-visible:</strong> Gets visibility class without animation</p>
                 <p style="margin-top: 20px; color: #666;">Check the status indicators above to see if elements triggered.</p>
             </div>
         </div>
@@ -280,6 +307,37 @@ bpAnimate.trigger(element);</code></pre>
                 };
                 
                 setInterval(checkScrollable, 500);
+            }
+
+            // Monitor bp-is-visible element
+            const visibleOnly = document.getElementById('visible-only');
+            const visibleStatus = document.getElementById('status-visible');
+            
+            if (visibleOnly && visibleStatus) {
+                let checkTimeout;
+                const checkVisible = function() {
+                    clearTimeout(checkTimeout);
+                    checkTimeout = setTimeout(function() {
+                        const isVisible = visibleOnly.classList.contains('bp-is-visible');
+                        const isAnimating = visibleOnly.classList.contains('bp-is-animating');
+                        
+                        if (isVisible) {
+                            visibleOnly.classList.add('triggered');
+                            visibleStatus.textContent = 'Status: ✓ bp-is-visible class added (no animation)';
+                            visibleStatus.className = 'status visible';
+                        } else {
+                            visibleStatus.textContent = 'Status: Waiting for element to enter viewport...';
+                            visibleStatus.className = 'status';
+                        }
+                        
+                        if (isAnimating) {
+                            visibleStatus.textContent = 'Status: ✗ ERROR - bp-is-animating should NOT be added (no animation class)';
+                            visibleStatus.className = 'status hidden';
+                        }
+                    }, 100);
+                };
+                
+                setInterval(checkVisible, 500);
             }
 
             // Dynamic visibility demo

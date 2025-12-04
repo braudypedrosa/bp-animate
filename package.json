@@ -1,6 +1,6 @@
 {
   "name": "bp-animate",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A lightweight, vanilla JavaScript animation library that triggers animations when elements come into view",
   "main": "dist/bp-animate.js",
   "style": "dist/bp-animate.css",
