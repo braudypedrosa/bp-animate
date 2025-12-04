@@ -443,6 +443,27 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 
 This project follows [Semantic Versioning](https://semver.org/). See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
+### Updating Versions
+
+To update the version across all files automatically:
+
+```bash
+npm run version:update <new-version>
+```
+
+Example:
+```bash
+npm run version:update 1.2.0
+```
+
+This will update:
+- `package.json` - version field
+- `src/js/bp-animate.js` - @version comment
+- `src/scss/bp-animate.scss` - @version comment
+- `README.md` - CDN links (if present)
+
+See [VERSIONING.md](VERSIONING.md) for detailed version management guide.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes in each version.

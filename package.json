@@ -11,7 +11,9 @@
     "build:js": "cp src/js/bp-animate.js dist/bp-animate.js",
     "build:all": "npm run build && npm run build:css:min",
     "watch": "sass --watch src/scss/bp-animate.scss:dist/bp-animate.css",
-    "version": "npm run build && git add -A dist",
+    "version:update": "node scripts/update-version.js",
+    "version": "node scripts/update-version.js",
+    "postversion": "npm run build:all && git add -A dist",
     "prepublishOnly": "npm run build:all"
   },
   "keywords": [
@@ -45,4 +47,3 @@
     "sass": "^1.69.0"
   }
 }
-
