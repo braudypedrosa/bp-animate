@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.2] - 2024-01-XX
+## [1.2.2] - 2025-12-05
 
 ### Fixed
 - Fixed issue where elements with zero dimensions (width: 0, height: 0) and custom animation classes were incorrectly being marked as hidden
@@ -22,14 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced MutationObserver to detect when animation classes are added dynamically
 - Custom animation classes are now recognized across all animation detection functions
 
-## [1.2.1] - 2024-01-XX
+## [1.2.1] - 2025-12-05
 
 ### Added
 - Added `bp-is-hidden` class that gets added to elements in viewport but not actually visible
 - `bp-is-hidden` works for elements hidden via `opacity: 0`, `display: none`, `visibility: hidden`, or zero dimensions
 - Useful for detecting elements that are technically in viewport but hidden from user's view
 
-## [1.2.0] - 2024-01-XX
+## [1.2.0] - 2025-12-05
 
 ### Added
 - Added `bp-is-visible` class that gets added to all elements with `bp-animate` when they enter the viewport
@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `bp-is-visible` is now added to all visible elements, regardless of whether they have animation classes
 - Improved separation between visibility detection and animation triggering
 
-## [1.1.1] - 2024-01-XX
+## [1.1.1] - 2025-12-05
 
 ### Fixed
 - Fixed issue where fixed/absolute positioned elements with `opacity: 0` were incorrectly triggering animations
@@ -55,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved visibility check to require explicit permission for fixed/absolute elements with `opacity: 0`
 - Elements with inline `opacity: 0` style are now correctly identified as intentionally hidden
 
-## [1.1.0] - 2024-01-XX
+## [1.1.0] - 2025-12-05
 
 ### Fixed
 - Fixed visibility detection issue where elements with `opacity: 0` (without animation classes) were incorrectly triggering animations
@@ -66,7 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Visibility check now requires elements with `opacity: 0` to have a valid animation class to be considered visible
 - Improved performance of visibility detection logic
 
-## [1.0.0] - 2024-01-XX
+## [1.0.0] - 2025-12-04
 
 ### Added
 - Initial release of BP Animate library
