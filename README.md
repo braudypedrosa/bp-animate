@@ -63,8 +63,8 @@ jsDelivr provides a free CDN that works with GitHub repositories:
 <script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.js"></script>
 
 <!-- Specific version/tag (recommended for production) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.1/dist/bp-animate.css">
-<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.1/dist/bp-animate.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.2/dist/bp-animate.css">
+<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.2/dist/bp-animate.js"></script>
 ```
 
 **Benefits of jsDelivr:**

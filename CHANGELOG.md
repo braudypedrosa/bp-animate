@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2024-01-XX
+
+### Fixed
+- Fixed issue where elements with zero dimensions (width: 0, height: 0) and custom animation classes were incorrectly being marked as hidden
+- Fixed support for custom animation classes (e.g., `animation-growWidth`) that aren't in the predefined animation map
+
+### Added
+- Added automatic detection and observation of dynamically added elements with `bp-animate` class
+- Added MutationObserver to watch for new elements added to the DOM
+- Added `bpAnimate.observe(element)` public API method to manually observe new elements
+- Elements with custom animation classes (starting with `animation-` or containing animation keywords) are now properly recognized
+
+### Changed
+- Improved visibility detection to allow zero dimensions for elements with animation classes (animations may start from zero)
+- Enhanced MutationObserver to detect when animation classes are added dynamically
+- Custom animation classes are now recognized across all animation detection functions
+
 ## [1.2.1] - 2024-01-XX
 
 ### Added

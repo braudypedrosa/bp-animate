@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BP Animate - Fixed Position Menu Test</title>
+    <title>BP Animate - Visibility Detection Test</title>
     <link rel="stylesheet" href="../dist/bp-animate.css">
     <style>
         * {
@@ -31,6 +31,14 @@
             color: #667eea;
         }
 
+        .intro {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
         .test-section {
             background: white;
             padding: 30px;
@@ -51,6 +59,7 @@
             border: 2px solid #e0e0e0;
             border-radius: 5px;
             background: #f9f9f9;
+            min-height: 100px;
         }
 
         .test-item.triggered {
@@ -84,133 +93,99 @@
             color: #721c24;
         }
 
-        /* Fixed position menu - should NOT trigger */
-        .fixed-menu {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 200px;
-            padding: 20px;
-            background: #fff;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            opacity: 0; /* Hidden on load */
-        }
-
-        .fixed-menu.triggered {
-            border-color: #dc3545;
-            background: #f8d7da;
-        }
-
-        .fixed-menu.triggered::before {
-            content: "✗ INCORRECTLY TRIGGERED ";
-            color: #dc3545;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        /* Normal scrollable element - should trigger */
-        .scrollable-element {
-            margin: 50px 0;
-            padding: 30px;
-            background: #e7f3ff;
-            border: 2px solid #667eea;
-            border-radius: 8px;
-        }
-
         .spacer {
-            height: 100px;
+            height: 300px;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .explanation {
+            background: #e7f3ff;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin: 15px 0;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>BP Animate - Fixed Position Menu Test</h1>
-        <p>This demo tests whether fixed-position elements with opacity: 0 (like hidden menus) incorrectly trigger animations.</p>
-    </div>
+        <h1>BP Animate - Visibility Detection Test</h1>
+        <div class="intro">
+            <p>This demo tests how BP Animate handles elements that are in the viewport but hidden via different CSS methods.</p>
+            <p><strong>Expected behavior:</strong> All hidden elements should get <code>bp-is-hidden</code> class, NOT <code>bp-is-visible</code> or <code>bp-is-animating</code>.</p>
+        </div>
 
-    <!-- Fixed position menu - should NOT trigger -->
-    <div class="bp-animate fade-in fixed-menu" id="fixed-menu">
-        <strong>Fixed Menu</strong>
-        <p style="font-size: 0.9em; margin-top: 10px;">This menu is fixed position with opacity: 0. It should NOT trigger animations.</p>
-        <div class="status" id="status-menu">Waiting...</div>
-    </div>
+        <div class="spacer"></div>
 
-    <div class="spacer"></div>
-
-    <!-- Normal scrollable element - should trigger -->
-    <div class="container">
+        <!-- Test 1: opacity: 0 -->
         <div class="test-section">
-            <h2>Normal Scrollable Element (SHOULD Trigger)</h2>
-            <p>This element should trigger when scrolled into view.</p>
-            <div class="bp-animate fade-in scrollable-element" id="scrollable-element">
-                <strong>Scrollable Element</strong>
-                <p>This element has the fade-in animation and should trigger when you scroll it into view.</p>
-                <div class="status" id="status-scrollable">Waiting...</div>
+            <h2>Test 1: opacity: 0</h2>
+            <div class="explanation">
+                <p><strong>What this tests:</strong> Elements with <code>opacity: 0</code> are technically in the viewport but invisible to users.</p>
+                <p><strong>Expected:</strong> Should get <code>bp-is-hidden</code> class (not <code>bp-is-visible</code> or <code>bp-is-animating</code>).</p>
+            </div>
+            <div class="bp-animate test-item" id="test-opacity" style="opacity: 0; background: #fff3cd; border-color: #ffc107;">
+                <strong>Element with opacity: 0</strong>
+                <p>This element has <code>opacity: 0</code> set inline. It's in the viewport but not visible.</p>
+                <div class="status" id="status-opacity">Waiting for element to enter viewport...</div>
             </div>
         </div>
 
         <div class="spacer"></div>
 
-        <!-- bp-is-visible demo -->
+        <!-- Test 2: display: none -->
         <div class="test-section">
-            <h2>bp-is-visible Class (No Animation Required)</h2>
-            <p>This element has <code>bp-animate</code> but no animation class. It will get <code>bp-is-visible</code> when in viewport.</p>
-            <div class="bp-animate test-item" id="visible-only" style="background: #e7f3ff; border-color: #667eea;">
-                <strong>Element with bp-animate only</strong>
-                <p>This element will get <code>bp-is-visible</code> class when scrolled into view, but no animation will trigger.</p>
-                <div class="status" id="status-visible">Waiting...</div>
+            <h2>Test 2: display: none</h2>
+            <div class="explanation">
+                <p><strong>What this tests:</strong> Elements with <code>display: none</code> are completely removed from the layout flow.</p>
+                <p><strong>Expected:</strong> Should get <code>bp-is-hidden</code> class (not <code>bp-is-visible</code> or <code>bp-is-animating</code>).</p>
+            </div>
+            <div class="bp-animate test-item" id="test-display" style="display: none; background: #f8d7da; border-color: #dc3545;">
+                <strong>Element with display: none</strong>
+                <p>This element has <code>display: none</code> set inline. It's completely hidden from the layout.</p>
+                <div class="status" id="status-display">Waiting for element to enter viewport...</div>
+            </div>
+            <p style="margin-top: 10px; color: #666; font-size: 0.9em;">
+                <em>Note: Elements with <code>display: none</code> won't be detected by Intersection Observer, so they won't trigger any classes. This is expected behavior.</em>
+            </p>
+        </div>
+
+        <div class="spacer"></div>
+
+        <!-- Test 3: visibility: hidden -->
+        <div class="test-section">
+            <h2>Test 3: visibility: hidden</h2>
+            <div class="explanation">
+                <p><strong>What this tests:</strong> Elements with <code>visibility: hidden</code> are in the layout but invisible.</p>
+                <p><strong>Expected:</strong> Should get <code>bp-is-hidden</code> class (not <code>bp-is-visible</code> or <code>bp-is-animating</code>).</p>
+            </div>
+            <div class="bp-animate test-item" id="test-visibility" style="visibility: hidden; background: #d1ecf1; border-color: #17a2b8;">
+                <strong>Element with visibility: hidden</strong>
+                <p>This element has <code>visibility: hidden</code> set inline. It takes up space but is invisible.</p>
+                <div class="status" id="status-visibility">Waiting for element to enter viewport...</div>
             </div>
         </div>
 
         <div class="spacer"></div>
 
-        <!-- Dynamic visibility demo -->
+        <!-- Test 4: Zero Dimensions -->
         <div class="test-section">
-            <h2>Dynamic Visibility Demo</h2>
-            <p>This menu starts hidden. Click the button to make it visible - the animation will trigger automatically!</p>
-            <button id="toggle-menu" style="padding: 10px 20px; margin-bottom: 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">
-                Show Menu
-            </button>
-            <div class="bp-animate fade-in fixed-menu" id="dynamic-menu" style="position: relative; top: auto; right: auto; opacity: 0;">
-                <strong>Dynamic Menu</strong>
-                <p style="font-size: 0.9em; margin-top: 10px;">This menu becomes visible when you click the button above.</p>
-                <div class="status" id="status-dynamic">Hidden - Click button to show</div>
+            <h2>Test 4: Zero Dimensions (width: 0 and/or height: 0)</h2>
+            <div class="explanation">
+                <p><strong>What this tests:</strong> Elements with zero width and/or height are in the viewport but have no visible area.</p>
+                <p><strong>Expected:</strong> Should get <code>bp-is-hidden</code> class (not <code>bp-is-visible</code> or <code>bp-is-animating</code>).</p>
             </div>
-        </div>
-
-        <div class="spacer"></div>
-
-        <!-- Manual trigger demo -->
-        <div class="test-section">
-            <h2>Manual Trigger Demo</h2>
-            <p>You can also manually trigger animations using JavaScript:</p>
-            <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto;"><code>// Trigger animation on an element
-bpAnimate.trigger('#my-element');
-
-// Or pass the element directly
-const element = document.querySelector('#my-element');
-bpAnimate.trigger(element);</code></pre>
-            <button id="manual-trigger" style="padding: 10px 20px; margin-top: 15px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">
-                Manually Trigger Animation
-            </button>
-            <div class="bp-animate fade-in test-item" id="manual-element" style="opacity: 0; margin-top: 15px;">
-                <strong>Manually Triggered Element</strong>
-                <div class="status" id="status-manual">Click button above to trigger</div>
-            </div>
-        </div>
-
-        <div class="spacer"></div>
-
-        <!-- bp-is-visible demo -->
-        <div class="test-section">
-            <h2>bp-is-visible Class (No Animation Required)</h2>
-            <p>This element has <code>bp-animate</code> but no animation class. It will get <code>bp-is-visible</code> when in viewport.</p>
-            <div class="bp-animate test-item" id="visible-only" style="background: #e7f3ff; border-color: #667eea;">
-                <strong>Element with bp-animate only</strong>
-                <p>This element will get <code>bp-is-visible</code> class when scrolled into view, but no animation will trigger.</p>
-                <div class="status" id="status-visible">Waiting...</div>
+            <div class="bp-animate test-item" id="test-zero-dimensions" style="width: 0; height: 0; overflow: hidden; background: #e2e3e5; border-color: #6c757d;">
+                <strong>Element with Zero Dimensions</strong>
+                <p>This element has <code>width: 0</code> and <code>height: 0</code>. It has no visible area.</p>
+                <div class="status" id="status-zero-dimensions">Waiting for element to enter viewport...</div>
             </div>
         </div>
 
@@ -218,15 +193,13 @@ bpAnimate.trigger(element);</code></pre>
 
         <!-- Summary -->
         <div class="test-section">
-            <h2>Test Results</h2>
+            <h2>Test Results Summary</h2>
             <div id="summary">
-                <p><strong>Fixed Menu:</strong> Should NOT trigger (it's hidden with opacity: 0)</p>
-                <p><strong>Scrollable Element:</strong> Should trigger when scrolled into view</p>
-                <p><strong>Dynamic Menu:</strong> Will trigger when made visible via class/CSS change</p>
-                <p><strong>bp-is-visible:</strong> Gets visibility class without animation</p>
-                <p><strong>bp-is-hidden:</strong> Gets hidden class when in viewport but not visible</p>
-                <p><strong>bp-is-hidden:</strong> Gets hidden class when in viewport but not visible</p>
-                <p style="margin-top: 20px; color: #666;">Check the status indicators above to see if elements triggered.</p>
+                <p><strong>opacity: 0:</strong> Should get <code>bp-is-hidden</code> class</p>
+                <p><strong>display: none:</strong> Won't be detected (expected - Intersection Observer doesn't see hidden elements)</p>
+                <p><strong>visibility: hidden:</strong> Should get <code>bp-is-hidden</code> class</p>
+                <p><strong>Zero dimensions:</strong> Should get <code>bp-is-hidden</code> class</p>
+                <p style="margin-top: 20px; color: #666;">Check the status indicators above to see the actual results.</p>
             </div>
         </div>
 
@@ -241,227 +214,84 @@ bpAnimate.trigger(element);</code></pre>
         (function() {
             'use strict';
             
-            // Monitor fixed menu
-            const fixedMenu = document.getElementById('fixed-menu');
-            const menuStatus = document.getElementById('status-menu');
-            
-            if (fixedMenu && menuStatus) {
-                const style = window.getComputedStyle(fixedMenu);
-                menuStatus.textContent = `Position: ${style.position}, Opacity: ${style.opacity}`;
+            /**
+             * Monitor an element for class changes
+             * @param {HTMLElement} element - The element to monitor
+             * @param {HTMLElement} statusEl - The status display element
+             * @param {string} testName - Name of the test for logging
+             */
+            function monitorElement(element, statusEl, testName) {
+                if (!element || !statusEl) return;
                 
                 let checkTimeout;
-                const checkMenu = function() {
+                const checkStatus = function() {
                     clearTimeout(checkTimeout);
                     checkTimeout = setTimeout(function() {
-                        const isAnimating = fixedMenu.classList.contains('bp-is-animating');
-                        const isDone = fixedMenu.classList.contains('bp-is-done-animating');
+                        const isVisible = element.classList.contains('bp-is-visible');
+                        const isHidden = element.classList.contains('bp-is-hidden');
+                        const isAnimating = element.classList.contains('bp-is-animating');
+                        const isDone = element.classList.contains('bp-is-done-animating');
                         
-                        if (isAnimating || isDone) {
-                            fixedMenu.classList.add('triggered');
-                            
-                            if (isAnimating) {
-                                menuStatus.textContent = 'Status: ✗ INCORRECTLY TRIGGERED (bp-is-animating added)';
-                                menuStatus.className = 'status hidden';
-                                console.error('ERROR: Fixed menu triggered when it should not have!');
-                            }
-                            
-                            if (isDone) {
-                                menuStatus.textContent = 'Status: ✗ INCORRECTLY COMPLETE (bp-is-done-animating added)';
-                                menuStatus.className = 'status hidden';
-                            }
-                        } else {
-                            menuStatus.textContent = 'Status: ✓ NOT TRIGGERED (correct behavior)';
-                            menuStatus.className = 'status visible';
-                        }
-                    }, 100);
-                };
-                
-                setInterval(checkMenu, 500);
-            }
-
-            // Monitor scrollable element
-            const scrollableEl = document.getElementById('scrollable-element');
-            const scrollableStatus = document.getElementById('status-scrollable');
-            
-            if (scrollableEl && scrollableStatus) {
-                let checkTimeout;
-                const checkScrollable = function() {
-                    clearTimeout(checkTimeout);
-                    checkTimeout = setTimeout(function() {
-                        const isAnimating = scrollableEl.classList.contains('bp-is-animating');
-                        const isDone = scrollableEl.classList.contains('bp-is-done-animating');
+                        // Get computed styles for debugging
+                        const computedStyle = window.getComputedStyle(element);
+                        const rect = element.getBoundingClientRect();
                         
-                        if (isAnimating || isDone) {
-                            scrollableEl.classList.add('triggered');
-                            
-                            if (isAnimating) {
-                                scrollableStatus.textContent = 'Status: ✓ TRIGGERED (bp-is-animating added)';
-                                scrollableStatus.className = 'status visible';
-                                console.log('SUCCESS: Scrollable element triggered correctly');
-                            }
-                            
-                            if (isDone) {
-                                scrollableStatus.textContent = 'Status: ✓ COMPLETE (bp-is-done-animating added)';
-                                scrollableStatus.className = 'status visible';
-                            }
-                        }
-                    }, 100);
-                };
-                
-                setInterval(checkScrollable, 500);
-            }
-
-            // Monitor bp-is-visible element
-            const visibleOnly = document.getElementById('visible-only');
-            const visibleStatus = document.getElementById('status-visible');
-            
-            if (visibleOnly && visibleStatus) {
-                let checkTimeout;
-                const checkVisible = function() {
-                    clearTimeout(checkTimeout);
-                    checkTimeout = setTimeout(function() {
-                        const isVisible = visibleOnly.classList.contains('bp-is-visible');
-                        const isHidden = visibleOnly.classList.contains('bp-is-hidden');
-                        const isAnimating = visibleOnly.classList.contains('bp-is-animating');
-                        
-                        if (isVisible) {
-                            visibleOnly.classList.add('triggered');
-                            visibleStatus.textContent = 'Status: ✓ bp-is-visible class added (no animation)';
-                            visibleStatus.className = 'status visible';
-                        } else if (isHidden) {
-                            visibleStatus.textContent = 'Status: ✗ bp-is-hidden class added (element is hidden)';
-                            visibleStatus.className = 'status hidden';
-                        } else {
-                            visibleStatus.textContent = 'Status: Waiting for element to enter viewport...';
-                            visibleStatus.className = 'status';
-                        }
-                        
-                        if (isAnimating) {
-                            visibleStatus.textContent = 'Status: ✗ ERROR - bp-is-animating should NOT be added (no animation class)';
-                            visibleStatus.className = 'status hidden';
-                        }
-                    }, 100);
-                };
-                
-                setInterval(checkVisible, 500);
-            }
-
-            // Monitor bp-is-hidden element
-            const hiddenOnly = document.getElementById('hidden-only');
-            const hiddenStatus = document.getElementById('status-hidden');
-            
-            if (hiddenOnly && hiddenStatus) {
-                let checkTimeout;
-                const checkHidden = function() {
-                    clearTimeout(checkTimeout);
-                    checkTimeout = setTimeout(function() {
-                        const isVisible = hiddenOnly.classList.contains('bp-is-visible');
-                        const isHidden = hiddenOnly.classList.contains('bp-is-hidden');
-                        const isAnimating = hiddenOnly.classList.contains('bp-is-animating');
+                        let statusText = '';
+                        let statusClass = '';
                         
                         if (isHidden) {
-                            hiddenOnly.classList.add('triggered');
-                            hiddenStatus.textContent = 'Status: ✓ bp-is-hidden class added (element in viewport but hidden)';
-                            hiddenStatus.className = 'status visible';
+                            element.classList.add('triggered');
+                            statusText = `Status: ✓ bp-is-hidden class added (correct - element is hidden)`;
+                            statusClass = 'status visible';
                         } else if (isVisible) {
-                            hiddenStatus.textContent = 'Status: ✗ ERROR - bp-is-visible should NOT be added (element is hidden)';
-                            hiddenStatus.className = 'status hidden';
+                            statusText = `Status: ✗ ERROR - bp-is-visible should NOT be added (element is hidden)`;
+                            statusClass = 'status hidden';
+                        } else if (isAnimating) {
+                            statusText = `Status: ✗ ERROR - bp-is-animating should NOT be added (element is hidden)`;
+                            statusClass = 'status hidden';
+                        } else if (isDone) {
+                            statusText = `Status: ✗ ERROR - bp-is-done-animating should NOT be added (element is hidden)`;
+                            statusClass = 'status hidden';
                         } else {
-                            hiddenStatus.textContent = 'Status: Waiting for element to enter viewport...';
-                            hiddenStatus.className = 'status';
+                            statusText = `Status: Waiting for element to enter viewport...`;
+                            statusClass = 'status';
                         }
                         
-                        if (isAnimating) {
-                            hiddenStatus.textContent = 'Status: ✗ ERROR - bp-is-animating should NOT be added (element is hidden)';
-                            hiddenStatus.className = 'status hidden';
-                        }
+                        // Add debug info
+                        statusText += `<br><small style="color: #666;">Debug: width=${rect.width}px, height=${rect.height}px, opacity=${computedStyle.opacity}, display=${computedStyle.display}, visibility=${computedStyle.visibility}</small>`;
+                        
+                        statusEl.innerHTML = statusText;
+                        statusEl.className = statusClass;
                     }, 100);
                 };
                 
-                setInterval(checkHidden, 500);
+                setInterval(checkStatus, 500);
             }
-
-            // Dynamic visibility demo
-            const toggleButton = document.getElementById('toggle-menu');
-            const dynamicMenu = document.getElementById('dynamic-menu');
-            const dynamicStatus = document.getElementById('status-dynamic');
             
-            if (toggleButton && dynamicMenu && dynamicStatus) {
-                let isVisible = false;
-                
-                toggleButton.addEventListener('click', function() {
-                    if (!isVisible) {
-                        // Make menu visible by removing opacity: 0
-                        dynamicMenu.style.opacity = '1';
-                        dynamicMenu.style.transition = 'opacity 0.3s ease-in-out';
-                        toggleButton.textContent = 'Hide Menu';
-                        isVisible = true;
-                        
-                        // The MutationObserver will detect the style change and trigger animation
-                        // But we can also manually trigger if needed
-                        setTimeout(function() {
-                            if (window.bpAnimate) {
-                                window.bpAnimate.trigger(dynamicMenu);
-                            }
-                        }, 100);
-                    } else {
-                        // Hide menu
-                        dynamicMenu.style.opacity = '0';
-                        dynamicMenu.classList.remove('bp-is-animating', 'bp-is-done-animating', 'triggered');
-                        toggleButton.textContent = 'Show Menu';
-                        isVisible = false;
-                        dynamicStatus.textContent = 'Hidden - Click button to show';
-                        dynamicStatus.className = 'status';
-                    }
-                });
-                
-                // Monitor dynamic menu
-                let checkTimeout;
-                const checkDynamic = function() {
-                    clearTimeout(checkTimeout);
-                    checkTimeout = setTimeout(function() {
-                        const isAnimating = dynamicMenu.classList.contains('bp-is-animating');
-                        const isDone = dynamicMenu.classList.contains('bp-is-done-animating');
-                        
-                        if (isAnimating) {
-                            dynamicMenu.classList.add('triggered');
-                            dynamicStatus.textContent = 'Status: ✓ TRIGGERED (bp-is-animating added)';
-                            dynamicStatus.className = 'status visible';
-                        }
-                        
-                        if (isDone) {
-                            dynamicStatus.textContent = 'Status: ✓ COMPLETE (bp-is-done-animating added)';
-                            dynamicStatus.className = 'status visible';
-                        }
-                    }, 100);
-                };
-                
-                setInterval(checkDynamic, 500);
-            }
-
-            // Manual trigger demo
-            const manualTriggerBtn = document.getElementById('manual-trigger');
-            const manualElement = document.getElementById('manual-element');
-            const manualStatus = document.getElementById('status-manual');
+            // Monitor all test elements
+            monitorElement(
+                document.getElementById('test-opacity'),
+                document.getElementById('status-opacity'),
+                'opacity: 0'
+            );
             
-            if (manualTriggerBtn && manualElement && manualStatus) {
-                manualTriggerBtn.addEventListener('click', function() {
-                    // Make element visible first
-                    manualElement.style.opacity = '1';
-                    
-                    // Manually trigger animation
-                    if (window.bpAnimate) {
-                        const triggered = window.bpAnimate.trigger(manualElement);
-                        if (triggered) {
-                            manualStatus.textContent = 'Status: Animation triggered!';
-                            manualStatus.className = 'status visible';
-                        } else {
-                            manualStatus.textContent = 'Status: Failed to trigger (element not visible or no animation class)';
-                            manualStatus.className = 'status hidden';
-                        }
-                    }
-                });
-            }
+            monitorElement(
+                document.getElementById('test-display'),
+                document.getElementById('status-display'),
+                'display: none'
+            );
+            
+            monitorElement(
+                document.getElementById('test-visibility'),
+                document.getElementById('status-visibility'),
+                'visibility: hidden'
+            );
+            
+            monitorElement(
+                document.getElementById('test-zero-dimensions'),
+                document.getElementById('status-zero-dimensions'),
+                'zero dimensions'
+            );
         })();
     </script>
 </body>

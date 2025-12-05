@@ -6,7 +6,7 @@
  * but triggers the "bp-is-animating" class when elements enter the viewport.
  * When the animation completes, it adds the "bp-is-done-animating" class.
  * 
- * @version 1.2.1
+ * @version 1.2.2
  */
 
 (function() {
@@ -157,8 +157,35 @@
         
         // Check if element has dimensions
         const rect = element.getBoundingClientRect();
+        
+        // Check if element has a valid animation class (predefined or custom)
+        // Custom animation classes often start with "animation-" prefix
+        const hasAnimationClass = getKeyframeName(element) !== null;
+        const hasCustomAnimationClass = Array.from(element.classList).some(className => 
+            className.startsWith('animation-') || 
+            className.includes('animate') ||
+            className.includes('grow') ||
+            className.includes('slide') ||
+            className.includes('fade') ||
+            className.includes('scale') ||
+            className.includes('rotate') ||
+            className.includes('bounce') ||
+            className.includes('flip')
+        );
+        
+        // If element has zero dimensions, check if it has an animation class
+        // Animations like growWidth, scale-up, etc. may intentionally start from zero
         if (rect.width === 0 && rect.height === 0) {
-            return false;
+            // Allow zero dimensions if element has an animation class (predefined or custom)
+            // The animation will handle making it visible
+            if (hasAnimationClass || hasCustomAnimationClass) {
+                // Element has animation class and zero dimensions - this is likely intentional
+                // (e.g., animation-growWidth starts from width: 0)
+                // Continue with visibility check
+            } else {
+                // No animation class and zero dimensions - element is truly hidden
+                return false;
+            }
         }
         
         // Check opacity
@@ -362,6 +389,109 @@
         animateElements.forEach(element => {
             observer.observe(element);
         });
+        
+        // Store observer globally so we can add new elements to it later
+        window._bpAnimateObserver = observer;
+        
+        return observer;
+    }
+    
+    /**
+     * Observe a new element that was dynamically added to the DOM
+     * 
+     * This function adds a new element to the Intersection Observer
+     * and sets up visibility change watching for dynamically added elements.
+     * 
+     * @param {HTMLElement} element - The element to observe
+     * @since 1.2.1
+     */
+    function observeNewElement(element) {
+        // Check if element has bp-animate class
+        if (!element.classList.contains('bp-animate')) {
+            return;
+        }
+        
+        // Check if element is already being observed
+        if (element.dataset.bpObserved === 'true') {
+            return;
+        }
+        
+        // Mark as observed
+        element.dataset.bpObserved = 'true';
+        
+        // Get or create the observer
+        let observer = window._bpAnimateObserver;
+        
+        if (!observer) {
+            // Observer doesn't exist yet, initialize it
+            initBPAnimate();
+            observer = window._bpAnimateObserver;
+        }
+        
+        if (observer) {
+            // Add element to Intersection Observer
+            observer.observe(element);
+            
+            // Set up visibility change watching
+            watchForVisibilityChanges([element]);
+            
+            // If element is already in viewport, trigger check immediately
+            const rect = element.getBoundingClientRect();
+            const isInViewport = rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
+                                rect.bottom > 0 &&
+                                rect.left < (window.innerWidth || document.documentElement.clientWidth) &&
+                                rect.right > 0;
+            
+            if (isInViewport) {
+                // Small delay to ensure CSS is applied
+                setTimeout(function() {
+                    triggerAnimation(element);
+                }, 50);
+            }
+        }
+    }
+    
+    /**
+     * Watch for dynamically added elements with bp-animate class
+     * 
+     * Sets up a MutationObserver to watch the entire document for new elements
+     * being added that have the bp-animate class.
+     * 
+     * @since 1.2.1
+     */
+    function watchForNewElements() {
+        // Create a MutationObserver to watch for new elements
+        const domObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                // Check for newly added nodes
+                mutation.addedNodes.forEach(function(node) {
+                    // Only process element nodes
+                    if (node.nodeType === 1) { // Element node
+                        // Check if the node itself has bp-animate class
+                        if (node.classList && node.classList.contains('bp-animate')) {
+                            observeNewElement(node);
+                        }
+                        
+                        // Also check for bp-animate elements within the added node
+                        const bpAnimateElements = node.querySelectorAll && node.querySelectorAll('.bp-animate');
+                        if (bpAnimateElements) {
+                            bpAnimateElements.forEach(function(element) {
+                                observeNewElement(element);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Start observing the document body for child additions
+        domObserver.observe(document.body, {
+            childList: true,    // Watch for added/removed children
+            subtree: true       // Watch all descendants, not just direct children
+        });
+        
+        // Store observer so it persists
+        window._bpAnimateDOMObserver = domObserver;
     }
 
     /**
@@ -502,6 +632,8 @@
             // Watch for dynamic visibility changes
             const animateElements = document.querySelectorAll('.bp-animate');
             watchForVisibilityChanges(Array.from(animateElements));
+            // Watch for dynamically added elements
+            watchForNewElements();
         });
     } else {
         // DOM is already loaded, initialize immediately
@@ -509,12 +641,15 @@
         // Watch for dynamic visibility changes
         const animateElements = document.querySelectorAll('.bp-animate');
         watchForVisibilityChanges(Array.from(animateElements));
+        // Watch for dynamically added elements
+        watchForNewElements();
     }
 
     // Expose public API
     window.bpAnimate = {
         trigger: triggerAnimation,
-        init: initBPAnimate
+        init: initBPAnimate,
+        observe: observeNewElement
     };
 
 })();
