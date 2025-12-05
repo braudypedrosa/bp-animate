@@ -11,10 +11,23 @@ A lightweight, vanilla JavaScript animation library that triggers animations whe
 - 📦 **Lightweight** - Minimal footprint, maximum performance
 - 🎭 **Keyframe-Based** - All animations use CSS keyframes for smooth performance
 - ✅ **Animation Completion** - Detects when animations finish with `bp-is-done-animating` class
+- 🔄 **Dynamic Elements** - Automatically detects and animates elements added to the page dynamically
 
 ## Installation
 
-### Option 1: NPM (Recommended)
+### Option 1: jsDelivr CDN (Recommended)
+
+```html
+<!-- Latest version from main branch -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.css">
+<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.js"></script>
+
+<!-- Specific version (recommended for production) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.2/dist/bp-animate.css">
+<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.2/dist/bp-animate.js"></script>
+```
+
+### Option 2: NPM
 
 ```bash
 npm install bp-animate
@@ -30,63 +43,13 @@ Then include in your project:
 <script src="node_modules/bp-animate/dist/bp-animate.js"></script>
 ```
 
-### Option 2: Download Files
+### Option 3: Download Files
 
 Download the following files from the [releases page](https://github.com/braudypedrosa/bp-animate/releases):
 - `dist/bp-animate.js` - The JavaScript library
 - `dist/bp-animate.css` - The compiled CSS
 
-### Option 3: GitHub Raw Links (Auto-Update)
-
-You can link directly to the raw GitHub files. These will automatically update when you push changes:
-
-```html
-<!-- CSS -->
-<link rel="stylesheet" href="https://raw.githubusercontent.com/braudypedrosa/bp-animate/main/dist/bp-animate.css">
-
-<!-- JavaScript -->
-<script src="https://raw.githubusercontent.com/braudypedrosa/bp-animate/main/dist/bp-animate.js"></script>
-```
-
-**Note:** Raw GitHub links work but aren't recommended for production due to:
-- No caching headers (slower performance)
-- No versioning (breaking changes affect all users)
-- GitHub rate limiting
-
-### Option 4: jsDelivr CDN (Recommended for Production)
-
-jsDelivr provides a free CDN that works with GitHub repositories:
-
-```html
-<!-- Latest version from main branch -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.css">
-<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@main/dist/bp-animate.js"></script>
-
-<!-- Specific version/tag (recommended for production) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.2/dist/bp-animate.css">
-<script src="https://cdn.jsdelivr.net/gh/braudypedrosa/bp-animate@1.2.2/dist/bp-animate.js"></script>
-```
-
-**Benefits of jsDelivr:**
-- ✅ Fast CDN with caching
-- ✅ Version pinning for stability
-- ✅ Auto-updates when using `@main` branch
-- ✅ Works with GitHub releases/tags
-- ✅ Free and reliable
-
-### Option 5: NPM CDN (After Publishing)
-
-Once published to NPM:
-
-```html
-<!-- CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bp-animate@1.1.1/dist/bp-animate.css">
-
-<!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bp-animate@1.1.1/dist/bp-animate.js"></script>
-```
-
-### Option 4: Include in Your Project
+Then include in your HTML:
 
 ```html
 <!-- CSS -->
@@ -147,6 +110,17 @@ The `bp-is-visible` class is added when the element enters the viewport, regardl
 <div class="bp-animate bounce-in" bp-animation-once="true">
     This animation only runs once
 </div>
+```
+
+### Dynamically Added Elements
+
+Elements added to the page dynamically (via JavaScript) are automatically detected and animated:
+
+```javascript
+// Element added dynamically will be automatically observed
+const newElement = document.createElement('div');
+newElement.className = 'bp-animate fade-in';
+document.body.appendChild(newElement);
 ```
 
 ## HTML Attributes
@@ -235,6 +209,18 @@ If set to `"true"`, the animation only runs once. The element is unobserved afte
 - `slide-fade-down` - Slide and fade from above
 - `slide-fade-left` - Slide and fade from left
 - `slide-fade-right` - Slide and fade from right
+
+### Custom Animations
+
+You can also use custom animation classes. The library will automatically detect classes that:
+- Start with `animation-` (e.g., `animation-growWidth`)
+- Contain animation keywords like `animate`, `grow`, `slide`, `fade`, `scale`, `rotate`, `bounce`, or `flip`
+
+```html
+<div class="bp-animate animation-growWidth">
+    Custom animation
+</div>
+```
 
 ## CSS Classes
 
@@ -340,7 +326,7 @@ If set to `"true"`, the animation only runs once. The element is unobserved afte
 </div>
 ```
 
-### Multiple Elements
+### Multiple Elements with Staggered Animation
 
 ```html
 <div class="bp-animate fade-in">
@@ -369,59 +355,23 @@ If set to `"true"`, the animation only runs once. The element is unobserved afte
 }
 ```
 
-## Customization
+### Manual Trigger (JavaScript API)
 
-### Compiling SCSS
-
-If you want to customize the animations, edit `src/scss/bp-animate.scss` and compile it:
-
-```bash
-npm run build:css
-```
-
-Or manually:
-
-```bash
-sass src/scss/bp-animate.scss dist/bp-animate.css
-```
-
-### Creating Custom Animations
-
-1. Add your keyframe in `src/scss/bp-animate.scss`:
-
-```scss
-@keyframes bpMyCustom {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-```
-
-2. Add your animation class:
-
-```scss
-.my-custom {
-    opacity: 0;
-    transform: translateY(50px);
-
-    &.bp-is-animating {
-        animation: bpMyCustom 0.6s ease-in-out forwards;
-    }
-}
-```
-
-3. Update the JavaScript mapping in `src/js/bp-animate.js`:
+You can manually trigger animations using the JavaScript API:
 
 ```javascript
-const animationMap = {
-    // ... existing animations
-    'my-custom': 'bpMyCustom'
-};
+// Trigger animation on an element
+bpAnimate.trigger('#my-element');
+
+// Or pass the element directly
+const element = document.querySelector('#my-element');
+bpAnimate.trigger(element);
+
+// Observe a dynamically added element
+const newElement = document.createElement('div');
+newElement.className = 'bp-animate fade-in';
+document.body.appendChild(newElement);
+bpAnimate.observe(newElement);
 ```
 
 ## Browser Support
@@ -432,89 +382,10 @@ const animationMap = {
 - Edge (latest)
 - IE11+ (with polyfills for Intersection Observer)
 
-## Project Structure
-
-```
-bp-animate/
-├── src/
-│   ├── js/
-│   │   └── bp-animate.js    # JavaScript source
-│   └── scss/
-│       └── bp-animate.scss  # SCSS source
-├── dist/
-│   ├── bp-animate.js        # Compiled JavaScript
-│   └── bp-animate.css       # Compiled CSS
-├── docs/
-│   ├── demo.html            # Demo page
-│   └── demo.css             # Demo styles
-├── package.json             # NPM package configuration
-├── CHANGELOG.md             # Version history
-├── LICENSE                  # MIT License
-├── CONTRIBUTING.md          # Contribution guidelines
-└── README.md                # This file
-```
-
-## Development
-
-### Building from Source
-
-```bash
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Build with minified CSS
-npm run build:all
-
-# Watch SCSS files for changes
-npm run watch
-```
-
-### Available Scripts
-
-- `npm run build` - Build CSS and copy JS to dist
-- `npm run build:css` - Build CSS only
-- `npm run build:css:min` - Build minified CSS
-- `npm run build:js` - Copy JS to dist
-- `npm run build:all` - Build everything including minified versions
-- `npm run watch` - Watch SCSS files for changes
-
 ## License
 
 MIT License - feel free to use this in your projects!
 
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-## Versioning
-
-This project follows [Semantic Versioning](https://semver.org/). See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
-
-### Updating Versions
-
-To update the version across all files automatically:
-
-```bash
-npm run version:update <new-version>
-```
-
-Example:
-```bash
-npm run version:update 1.2.0
-```
-
-This will update:
-- `package.json` - version field
-- `src/js/bp-animate.js` - @version comment
-- `src/scss/bp-animate.scss` - @version comment
-- `README.md` - CDN links (if present)
-
-See [VERSIONING.md](VERSIONING.md) for detailed version management guide.
-
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes in each version.
-
